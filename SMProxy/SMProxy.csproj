@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AesStream.cs" />
     <Compile Include="BufferedStream.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="MinecraftStream.cs" />
     <Compile Include="MinecraftStream.Stream.cs" />
     <Compile Include="Packets.cs" />

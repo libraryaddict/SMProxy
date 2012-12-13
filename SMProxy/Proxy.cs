@@ -7,5 +7,6 @@ namespace SMProxy
 {
     public class Proxy
     {
+        public const int ProtocolVersion = 49;
     }
 }
