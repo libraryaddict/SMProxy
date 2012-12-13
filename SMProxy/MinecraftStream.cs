@@ -24,7 +24,7 @@ namespace SMProxy
 
         public void WriteUInt8(byte value)
         {
-            Write(new[] { value }, 0, 1);
+            WriteByte(value);
         }
 
         public sbyte ReadInt8()
