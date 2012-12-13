@@ -10,6 +10,13 @@ namespace SMProxy
     /// </summary>
     public partial class MinecraftStream
     {
+        static MinecraftStream()
+        {
+            StringEncoding = Encoding.BigEndianUnicode;
+        }
+
+        public static Encoding StringEncoding;
+
         public byte ReadUInt8()
         {
             return (byte)base.ReadByte();
@@ -122,6 +129,25 @@ namespace SMProxy
         public void WriteInt64(long value)
         {
             WriteUInt64((ulong)value);
+        }
+
+        public byte[] ReadUInt8Array(int length)
+        {
+            var buffer = new byte[length];
+            Read(buffer, 0, length);
+            return buffer;
+        }
+
+        public void WriteUInt8Array(byte[] value)
+        {
+            Write(value, 0, value.Length);
+        }
+
+        public string ReadString()
+        {
+            ushort length = ReadUInt16();
+            var data = ReadUInt8Array(length * 2);
+            return StringEncoding.GetString(data);
         }
     }
 }
