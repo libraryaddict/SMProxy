@@ -107,4 +107,47 @@ namespace SMProxy
             stream.WriteString(Message);
         }
     }
+
+    public struct TimeUpdatePacket : IPacket
+    {
+        public long WorldAge, TimeOfDay;
+
+        public int Id { get { return 0x04; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WorldAge = stream.ReadInt64();
+            TimeOfDay = stream.ReadInt64();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt64(WorldAge);
+            stream.WriteInt64(TimeOfDay);
+        }
+    }
+
+    public struct EntityEquipmentPacket : IPacket
+    {
+        public int EntityId;
+        public short SlotIndex;
+        public Slot Slot;
+
+        public int Id { get { return 0x05; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            EntityId = stream.ReadInt32();
+            SlotIndex = stream.ReadInt16();
+            Slot = Slot.FromStream(stream);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(EntityId);
+            stream.WriteInt16(SlotIndex);
+            Slot.WriteTo(stream);
+        }
+    }
+
 }
