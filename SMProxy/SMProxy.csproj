@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AesStream.cs" />
+    <Compile Include="Attributes.cs" />
     <Compile Include="BufferedStream.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="MinecraftStream.cs" />

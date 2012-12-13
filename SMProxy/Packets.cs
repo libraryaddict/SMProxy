@@ -43,7 +43,7 @@ namespace SMProxy
         public GameMode GameMode;
         public Dimension Dimension;
         public Difficulty Difficulty;
-        [EditorBrowsable(EditorBrowsableState.Never)] // TODO: Is there a better attribute for this? I don't want to create a new one.
+        [Hidden]
         public byte Discarded;
         public byte MaxPlayers;
 
@@ -69,6 +69,32 @@ namespace SMProxy
             stream.WriteUInt8((byte)Difficulty);
             stream.WriteUInt8(Discarded);
             stream.WriteUInt8(MaxPlayers);
+        }
+    }
+
+    public struct HandshakePacket : IPacket
+    {
+        public byte ProtocolVersion;
+        public string Username;
+        public string ServerHostname;
+        public int ServerPort;
+
+        public int Id { get { return 0x02; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            ProtocolVersion = stream.ReadUInt8();
+            Username = stream.ReadString();
+            ServerHostname = stream.ReadString();
+            ServerPort = stream.ReadInt32();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(ProtocolVersion);
+            stream.WriteString(Username);
+            stream.WriteString(ServerHostname);
+            stream.WriteInt32(ServerPort);
         }
     }
 }
