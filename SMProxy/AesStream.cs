@@ -30,8 +30,7 @@ namespace SMProxy
             cipher.Padding = PaddingMode.None;
             cipher.KeySize = 128;
             cipher.FeedbackSize = 8;
-            cipher.Key = key;
-            cipher.IV = key;
+            cipher.Key = cipher.IV = key;
 
             return cipher;
         }
@@ -42,9 +41,9 @@ namespace SMProxy
             set
             {
                 key = value;
-                Rijndael rijndael = GenerateAES(value);
-                ICryptoTransform encryptTransform = rijndael.CreateEncryptor();
-                ICryptoTransform decryptTransform = rijndael.CreateDecryptor();
+                var rijndael = GenerateAES(value);
+                var encryptTransform = rijndael.CreateEncryptor();
+                var decryptTransform = rijndael.CreateDecryptor();
 
                 encryptStream = new CryptoStream(BaseStream, encryptTransform, CryptoStreamMode.Write);
                 decryptStream = new CryptoStream(BaseStream, decryptTransform, CryptoStreamMode.Read);
