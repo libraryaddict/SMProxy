@@ -225,11 +225,39 @@ namespace SMProxy
             WriteUInt64Array((ulong[])(Array)value);
         }
 
+        public unsafe float ReadSingle()
+        {
+            int value = ReadInt32();
+            return *(float*)&value;
+        }
+
+        public unsafe void WriteSingle(float value)
+        {
+            WriteInt32(*(int*)&value);
+        }
+
+        public unsafe double ReadDouble()
+        {
+            long value = ReadInt64();
+            return *(double*)&value;
+        }
+
+        public unsafe void WriteDouble(double value)
+        {
+            WriteInt64(*(long*)&value);
+        }
+
         public string ReadString()
         {
             ushort length = ReadUInt16();
             var data = ReadUInt8Array(length * 2);
             return StringEncoding.GetString(data);
+        }
+
+        public void WriteString(string value)
+        {
+            WriteUInt16((ushort)value.Length);
+            WriteUInt8Array(StringEncoding.GetBytes(value));
         }
     }
 }
