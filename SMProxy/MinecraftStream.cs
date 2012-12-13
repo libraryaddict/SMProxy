@@ -143,6 +143,88 @@ namespace SMProxy
             Write(value, 0, value.Length);
         }
 
+        public sbyte[] ReadInt8Array(int length)
+        {
+            return (sbyte[])(Array)ReadUInt8Array(length);
+        }
+
+        public void WriteInt8Array(sbyte[] value)
+        {
+            Write((byte[])(Array)value, 0, value.Length);
+        }
+
+        public ushort[] ReadUInt16Array(int length)
+        {
+            var result = new ushort[length];
+            for (int i = 0; i < length; i++)
+                result[i] = ReadUInt16();
+            return result;
+        }
+
+        public void WriteUInt16Array(ushort[] value)
+        {
+            for (int i = 0; i < value.Length; i++)
+                WriteUInt16(value[i]);
+        }
+
+        public short[] ReadInt16Array(int length)
+        {
+            return (short[])(Array)ReadUInt16Array(length);
+        }
+
+        public void WriteInt16Array(short[] value)
+        {
+            WriteUInt16Array((ushort[])(Array)value);
+        }
+
+        public uint[] ReadUInt32Array(int length)
+        {
+            var result = new uint[length];
+            for (int i = 0; i < length; i++)
+                result[i] = ReadUInt32();
+            return result;
+        }
+
+        public void WriteUInt32Array(uint[] value)
+        {
+            for (int i = 0; i < value.Length; i++)
+                WriteUInt32(value[i]);
+        }
+
+        public int[] ReadInt32Array(int length)
+        {
+            return (int[])(Array)ReadUInt32Array(length);
+        }
+
+        public void WriteInt32Array(int[] value)
+        {
+            WriteUInt32Array((uint[])(Array)value);
+        }
+
+        public ulong[] ReadUInt64Array(int length)
+        {
+            var result = new ulong[length];
+            for (int i = 0; i < length; i++)
+                result[i] = ReadUInt64();
+            return result;
+        }
+
+        public void WriteUInt64Array(ulong[] value)
+        {
+            for (int i = 0; i < value.Length; i++)
+                WriteUInt64(value[i]);
+        }
+
+        public long[] ReadInt64Array(int length)
+        {
+            return (long[])(Array)ReadUInt64Array(length);
+        }
+
+        public void WriteInt64Array(long[] value)
+        {
+            WriteUInt64Array((ulong[])(Array)value);
+        }
+
         public string ReadString()
         {
             ushort length = ReadUInt16();
