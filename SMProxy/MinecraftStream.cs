@@ -113,5 +113,15 @@ namespace SMProxy
                 (byte)(value & 0xFF)
             }, 0, 8);
         }
+
+        public long ReadInt64()
+        {
+            return (long)ReadUInt64();
+        }
+
+        public void WriteInt64(long value)
+        {
+            WriteUInt64((ulong)value);
+        }
     }
 }

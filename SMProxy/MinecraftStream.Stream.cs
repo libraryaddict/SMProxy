@@ -6,6 +6,7 @@ using System.IO;
 
 namespace SMProxy
 {
+    // This file only has members of Stream
     public partial class MinecraftStream : Stream
     {
         public MinecraftStream(Stream baseStream)
