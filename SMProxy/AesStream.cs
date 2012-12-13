@@ -111,5 +111,25 @@ namespace SMProxy
             decryptStream.Close();
             encryptStream.Close();
         }
+
+        public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+        {
+            return decryptStream.BeginRead(buffer, offset, count, callback, state);
+        }
+
+        public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+        {
+            return encryptStream.BeginWrite(buffer, offset, count, callback, state);
+        }
+
+        public override int EndRead(IAsyncResult asyncResult)
+        {
+            return decryptStream.EndRead(asyncResult);
+        }
+
+        public override void EndWrite(IAsyncResult asyncResult)
+        {
+            encryptStream.EndWrite(asyncResult);
+        }
     }
 }
