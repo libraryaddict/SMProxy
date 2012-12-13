@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
 
 namespace SMProxy
 {
@@ -14,10 +13,8 @@ namespace SMProxy
         void WritePacket(MinecraftStream stream);
     }
 
-    [Description("Used by the server to ensure the connection is alive.")]
     public struct KeepAlivePacket : IPacket
     {
-        [Description("Clients respond with the same keep alive value to indicate that they are still connected.")]
         public int KeepAlive;
 
         public int Id { get { return 0x00; } }
@@ -33,17 +30,13 @@ namespace SMProxy
         }
     }
 
-    [Description("Send by the server to confirm a login and spawn the player.")]
     public struct LoginRequestPacket : IPacket
     {
-        [Description("The client's assigned entity ID.")]
         public int EntityId;
-        [Description("Level type from server.properties on vanilla")]
         public string LevelType;
         public GameMode GameMode;
         public Dimension Dimension;
         public Difficulty Difficulty;
-        [Hidden]
         public byte Discarded;
         public byte MaxPlayers;
 
@@ -95,6 +88,23 @@ namespace SMProxy
             stream.WriteString(Username);
             stream.WriteString(ServerHostname);
             stream.WriteInt32(ServerPort);
+        }
+    }
+
+    public struct ChatMessagePacket : IPacket
+    {
+        public string Message;
+
+        public int Id { get { return 0x03; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Message = stream.ReadString();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(Message);
         }
     }
 }
