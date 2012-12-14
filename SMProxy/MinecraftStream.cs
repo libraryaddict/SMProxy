@@ -247,6 +247,17 @@ namespace SMProxy
             WriteInt64(*(long*)&value);
         }
 
+        public bool ReadBoolean()
+        {
+            return ReadUInt8() != 0;
+        }
+
+        public void WriteBoolean(bool value)
+        {
+            if (value) WriteUInt8(1);
+            else       WriteUInt8(0);
+        }
+
         public string ReadString()
         {
             ushort length = ReadUInt16();

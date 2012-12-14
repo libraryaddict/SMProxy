@@ -45,7 +45,16 @@
   <ItemGroup>
     <Compile Include="AesStream.cs" />
     <Compile Include="BufferedStream.cs" />
+    <Compile Include="DataUtility.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="Metadata\MetadataByte.cs" />
+    <Compile Include="Metadata\MetadataDictionary.cs" />
+    <Compile Include="Metadata\MetadataEntry.cs" />
+    <Compile Include="Metadata\MetadataFloat.cs" />
+    <Compile Include="Metadata\MetadataInt.cs" />
+    <Compile Include="Metadata\MetadataShort.cs" />
+    <Compile Include="Metadata\MetadataSlot.cs" />
+    <Compile Include="Metadata\MetadataString.cs" />
     <Compile Include="MinecraftStream.cs" />
     <Compile Include="MinecraftStream.Stream.cs" />
     <Compile Include="Packets.cs" />
