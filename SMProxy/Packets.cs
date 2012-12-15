@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SMProxy.Metadata;
+using LibNbt;
 
 namespace SMProxy
 {
@@ -1040,6 +1041,862 @@ namespace SMProxy
             stream.WriteSingle(ExperienceBar);
             stream.WriteInt16(Level);
             stream.WriteInt16(TotalExperience);
+        }
+    }
+
+    public struct ChunkDataPacket : IPacket
+    {
+        //public static bool DecompressChunks = false; // TODO
+
+        public int X, Z;
+        public bool GroundUpContinuous;
+        [LogDisplay(LogDisplayType.Binary)]
+        public ushort PrimaryBitMap;
+        [LogDisplay(LogDisplayType.Binary)]
+        public ushort AddBitMap;
+        public byte[] Data;
+
+        public int Id { get { return 0x33; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            X = stream.ReadInt32();
+            Z = stream.ReadInt32();
+            PrimaryBitMap = stream.ReadUInt16();
+            AddBitMap = stream.ReadUInt16();
+            var length = stream.ReadInt32();
+            Data = stream.ReadUInt8Array(length);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(X);
+            stream.WriteInt32(Z);
+            stream.WriteUInt16(PrimaryBitMap);
+            stream.WriteUInt16(AddBitMap);
+            stream.WriteInt32(Data.Length);
+            stream.WriteUInt8Array(Data);
+        }
+    }
+
+    public struct MultipleBlockChangePacket : IPacket
+    {
+        public int ChunkX, ChunkZ;
+        public short RecordCount;
+        public int[] Data; // TODO: Display this in a friendly manner
+
+        public int Id { get { return 0x34; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            ChunkX = stream.ReadInt32();
+            ChunkZ = stream.ReadInt32();
+            RecordCount = stream.ReadInt16();
+            stream.ReadInt32();
+            Data = stream.ReadInt32Array(RecordCount);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(ChunkX);
+            stream.WriteInt32(ChunkZ);
+            stream.WriteInt16(RecordCount);
+            stream.WriteInt32(RecordCount * 4);
+            stream.WriteInt32Array(Data);
+        }
+    }
+
+    public struct BlockChangePacket : IPacket
+    {
+        public int X;
+        public byte Y;
+        public int Z;
+        public short BlockType;
+        public byte BlockMetadata;
+
+        public int Id { get { return 0x35; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            X = stream.ReadInt32();
+            Y = stream.ReadUInt8();
+            Z = stream.ReadInt32();
+            BlockType = stream.ReadInt16();
+            BlockMetadata = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(X);
+            stream.WriteUInt8(Y);
+            stream.WriteInt32(Z);
+            stream.WriteInt16(BlockType);
+            stream.WriteUInt8(BlockMetadata);
+        }
+    }
+
+    public struct BlockActionPacket : IPacket
+    {
+        public int X;
+        public short Y;
+        public int Z;
+        public byte Data1;
+        public byte Data2; // TODO: Perhaps expand on this
+        public short BlockId;
+
+        public int Id { get { return 0x36; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            X = stream.ReadInt32();
+            Y = stream.ReadInt16();
+            Z = stream.ReadInt32();
+            Data1 = stream.ReadUInt8();
+            Data2 = stream.ReadUInt8();
+            BlockId = stream.ReadInt16();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(X);
+            stream.WriteInt16(Y);
+            stream.WriteInt32(Z);
+            stream.WriteUInt8(Data1);
+            stream.WriteUInt8(Data2);
+            stream.WriteInt16(BlockId);
+        }
+    }
+
+    public struct BlockBreakAnimationPacket : IPacket
+    {
+        public int EntityId;
+        public int X, Y, Z;
+        public byte DestroyStage;
+
+        public int Id { get { return 0x37; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            EntityId = stream.ReadInt32();
+            X = stream.ReadInt32();
+            Y = stream.ReadInt32();
+            Z = stream.ReadInt32();
+            DestroyStage = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(EntityId);
+            stream.WriteInt32(X);
+            stream.WriteInt32(Y);
+            stream.WriteInt32(Z);
+            stream.WriteUInt8(DestroyStage);
+        }
+    }
+
+    public struct MapChunkBulkPacket : IPacket
+    {
+        // TODO: See about making this packet more detailed in logs
+        public short ChunkCount;
+        public byte[] ChunkData;
+        public byte[] ChunkMetadata;
+
+        public int Id { get { return 0x38; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            ChunkCount = stream.ReadInt16();
+            var length = stream.ReadInt32();
+            ChunkData = stream.ReadUInt8Array(length);
+            ChunkMetadata = stream.ReadUInt8Array(ChunkCount * 12);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt16(ChunkCount);
+            stream.WriteInt32(ChunkData.Length);
+            stream.WriteUInt8Array(ChunkData);
+            stream.WriteUInt8Array(ChunkMetadata);
+        }
+    }
+
+    public struct ExplosionPacket : IPacket
+    {
+        public double X, Y, Z;
+        public float Radius;
+        public int RecordCount;
+        public byte[] Records; // TODO: Consider making more detailed
+        public float PlayerVelocityX, PlayerVelocityY, PlayerVelocityZ;
+
+        public int Id { get { return 0x3C; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            X = stream.ReadDouble();
+            Y = stream.ReadDouble();
+            Z = stream.ReadDouble();
+            RecordCount = stream.ReadInt32();
+            Records = stream.ReadUInt8Array(RecordCount * 3);
+            PlayerVelocityX = stream.ReadSingle();
+            PlayerVelocityY = stream.ReadSingle();
+            PlayerVelocityZ = stream.ReadSingle();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteDouble(X);
+            stream.WriteDouble(Y);
+            stream.WriteDouble(Z);
+            stream.WriteInt32(RecordCount);
+            stream.WriteUInt8Array(Records);
+            stream.WriteSingle(PlayerVelocityX);
+            stream.WriteSingle(PlayerVelocityY);
+            stream.WriteSingle(PlayerVelocityZ);
+        }
+    }
+
+    public struct SoundOrParticleEffectPacket : IPacket
+    {
+        public int EntityId;
+        public int X, Y, Z;
+        public int Data;
+        public bool DisableRelativeVolume;
+
+        public int Id { get { return 0x3D; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            EntityId = stream.ReadInt32();
+            X = stream.ReadInt32();
+            Y = stream.ReadInt32();
+            Z = stream.ReadInt32();
+            Data = stream.ReadInt32();
+            DisableRelativeVolume = stream.ReadBoolean();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(EntityId);
+            stream.WriteInt32(X);
+            stream.WriteInt32(Y);
+            stream.WriteInt32(Z);
+            stream.WriteInt32(Data);
+            stream.WriteBoolean(DisableRelativeVolume);
+        }
+    }
+
+    public struct NamedSoundEffectPacket : IPacket
+    {
+        public string SoundName;
+        public int X, Y, Z;
+        public float Volume;
+        public byte Pitch;
+
+        public int Id { get { return 0x3E; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            SoundName = stream.ReadString();
+            X = stream.ReadInt32();
+            Y = stream.ReadInt32();
+            Z = stream.ReadInt32();
+            Volume = stream.ReadSingle();
+            Pitch = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(SoundName);
+            stream.WriteInt32(X);
+            stream.WriteInt32(Y);
+            stream.WriteInt32(Z);
+            stream.WriteSingle(Volume);
+            stream.WriteUInt8(Pitch);
+        }
+    }
+
+    public struct ChangeGameStatePacket : IPacket
+    {
+        // TODO: Expand upon this, list reason from enum
+        public byte State, GameMode;
+
+        public int Id { get { return 0x46; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            State = stream.ReadUInt8();
+            GameMode = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(State);
+            stream.WriteUInt8(GameMode);
+        }
+    }
+
+    public struct SpawnGlobalEntityPacket : IPacket
+    {
+        public int EntityId;
+        public byte Type;
+        public int X, Y, Z;
+
+        public int Id { get { return 0x47; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            EntityId = stream.ReadInt32();
+            Type = stream.ReadUInt8();
+            X = stream.ReadInt32();
+            Y = stream.ReadInt32();
+            Z = stream.ReadInt32();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(EntityId);
+            stream.WriteUInt8(Type);
+            stream.WriteInt32(X);
+            stream.WriteInt32(Y);
+            stream.WriteInt32(Z);
+        }
+    }
+
+    public struct OpenWindowPacket : IPacket
+    {
+        public byte WindowId;
+        public byte InventoryType;
+        public string WindowTitle;
+        public byte SlotCount;
+
+        public int Id { get { return 0x64; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+            InventoryType = stream.ReadUInt8();
+            WindowTitle = stream.ReadString();
+            SlotCount = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+            stream.WriteUInt8(InventoryType);
+            stream.WriteString(WindowTitle);
+            stream.WriteUInt8(SlotCount);
+        }
+    }
+
+    public struct CloseWindowPacket : IPacket
+    {
+        public byte WindowId;
+
+        public int Id { get { return 0x65; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+        }
+    }
+
+    public struct ClickWindowPacket : IPacket
+    {
+        public byte WindowId;
+        public short SlotIndex;
+        public byte MouseButton;
+        public short ActionNumber;
+        public bool Shift;
+        public Slot ClickedItem;
+
+        public int Id { get { return 0x66; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+            SlotIndex = stream.ReadInt16();
+            MouseButton = stream.ReadUInt8();
+            ActionNumber = stream.ReadInt16();
+            Shift = stream.ReadBoolean();
+            ClickedItem = Slot.FromStream(stream);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+            stream.WriteInt16(SlotIndex);
+            stream.WriteUInt8(MouseButton);
+            stream.WriteInt16(ActionNumber);
+            stream.WriteBoolean(Shift);
+            ClickedItem.WriteTo(stream);
+        }
+    }
+
+    public struct SetSlotPacket : IPacket
+    {
+        public byte WindowId;
+        public short SlotIndex;
+        public Slot Item;
+
+        public int Id { get { return 0x67; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+            SlotIndex = stream.ReadInt16();
+            Item = Slot.FromStream(stream);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+            stream.WriteInt16(SlotIndex);
+            Item.WriteTo(stream);
+        }
+    }
+
+    public struct SetWindowItemsPacket : IPacket
+    {
+        public byte WindowId;
+        public short Count;
+        public Slot[] Items;
+
+        public int Id { get { return 0x68; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+            Count = stream.ReadInt16();
+            Items = new Slot[Count];
+            for (int i = 0; i < Count; i++)
+                Items[i] = Slot.FromStream(stream);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+            stream.WriteInt16(Count);
+            for (int i = 0; i < Count; i++)
+                Items[i].WriteTo(stream);
+        }
+    }
+
+    public struct UpdateWindowPropertyPacket : IPacket
+    {
+        public byte WindowId;
+        public short PropertyId;
+        public short Value;
+
+        public int Id { get { return 0x69; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+            PropertyId = stream.ReadInt16();
+            Value = stream.ReadInt16();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+            stream.WriteInt16(PropertyId);
+            stream.WriteInt16(Value);
+        }
+    }
+
+    public struct ConfirmTransactionPacket : IPacket
+    {
+        public byte WindowId;
+        public short ActionNumber;
+        public bool Accepted;
+
+        public int Id { get { return 0x6A; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+            ActionNumber = stream.ReadInt16();
+            Accepted = stream.ReadBoolean();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+            stream.WriteInt16(ActionNumber);
+            stream.WriteBoolean(Accepted);
+        }
+    }
+
+    public struct CreativeInventoryActionPacket : IPacket
+    {
+        public short SlotIndex;
+        public Slot Item;
+
+        public int Id { get { return 0x6B; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            SlotIndex = stream.ReadInt16();
+            Item = Slot.FromStream(stream);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt16(SlotIndex);
+            Item.WriteTo(stream);
+        }
+    }
+
+    public struct EnchantItemPacket : IPacket
+    {
+        public byte WindowId;
+        public byte Enchantment;
+
+        public int Id { get { return 0x6C; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            WindowId = stream.ReadUInt8();
+            Enchantment = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(WindowId);
+            stream.WriteUInt8(Enchantment);
+        }
+    }
+
+    public struct UpdateSignPacket : IPacket
+    {
+        public int X;
+        public short Y;
+        public int Z;
+        public string Text1, Text2, Text3, Text4;
+
+        public int Id { get { return 0x82; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            X = stream.ReadInt32();
+            Y = stream.ReadInt16();
+            Z = stream.ReadInt32();
+            Text1 = stream.ReadString();
+            Text2 = stream.ReadString();
+            Text3 = stream.ReadString();
+            Text4 = stream.ReadString();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(X);
+            stream.WriteInt16(Y);
+            stream.WriteInt32(Z);
+            stream.WriteString(Text1);
+            stream.WriteString(Text2);
+            stream.WriteString(Text3);
+            stream.WriteString(Text4);
+        }
+    }
+
+    public struct ItemDataPacket : IPacket
+    {
+        public short ItemType, ItemId;
+        public string Text;
+
+        public int Id { get { return 0x83; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            ItemType = stream.ReadInt16();
+            ItemId = stream.ReadInt16();
+            var length = stream.ReadInt16();
+            Text = Encoding.ASCII.GetString(stream.ReadUInt8Array(length));
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt16(ItemType);
+            stream.WriteInt16(ItemId);
+            stream.WriteInt16((short)Text.Length);
+            stream.WriteUInt8Array(Encoding.ASCII.GetBytes(Text));
+        }
+    }
+
+    public struct UpdateTileEntityPacket : IPacket
+    {
+        public int X;
+        public short Y;
+        public int Z;
+        public byte Action;
+        public NbtFile Nbt;
+
+        public int Id { get { return 0x84; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            X = stream.ReadInt32();
+            Y = stream.ReadInt16();
+            Z = stream.ReadInt32();
+            Action = stream.ReadUInt8();
+            var length = stream.ReadInt16();
+            var data = stream.ReadUInt8Array(length);
+            Nbt = new NbtFile(new MemoryStream(data), NbtCompression.GZip, null);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(X);
+            stream.WriteInt16(Y);
+            stream.WriteInt32(Z);
+            stream.WriteUInt8(Action);
+            var tempStream = new MemoryStream();
+            Nbt.SaveToStream(tempStream, NbtCompression.GZip);
+            var buffer = tempStream.GetBuffer();//.Take((int)tempStream.Position).ToArray(); // ?
+            stream.WriteInt16((short)buffer.Length);
+            stream.WriteUInt8Array(buffer);
+        }
+    }
+
+    public struct IncrementStatisticPacket : IPacket
+    {
+        public int StatisticId;
+        public byte Amount;
+
+        public int Id { get { return 0xC8; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            StatisticId = stream.ReadInt32();
+            Amount = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt32(StatisticId);
+            stream.WriteUInt8(Amount);
+        }
+    }
+
+    public struct PlayerListItemPacket : IPacket
+    {
+        public string PlayerName;
+        public bool Online;
+        public short Ping;
+
+        public int Id { get { return 0xC9; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            PlayerName = stream.ReadString();
+            Online = stream.ReadBoolean();
+            Ping = stream.ReadInt16();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(PlayerName);
+            stream.WriteBoolean(Online);
+            stream.WriteInt16(Ping);
+        }
+    }
+
+    public struct PlayerAbilitiesPacket : IPacket
+    {
+        [LogDisplay(LogDisplayType.Binary)]
+        public byte Flags;
+        public byte FlyingSpeed, WalkingSpeed;
+
+        public int Id { get { return 0xCA; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Flags = stream.ReadUInt8();
+            FlyingSpeed = stream.ReadUInt8();
+            WalkingSpeed = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Flags);
+            stream.WriteUInt8(FlyingSpeed);
+            stream.WriteUInt8(WalkingSpeed);
+        }
+    }
+
+    public struct TabCompletePacket : IPacket
+    {
+        public string Text;
+
+        public int Id { get { return 0xCB; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Text = stream.ReadString();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(Text);
+        }
+    }
+
+    public struct ClientSettingsPacket : IPacket
+    {
+        public string Locale;
+        public byte ViewDistance;
+        [LogDisplay(LogDisplayType.Binary)]
+        public byte ChatFlags;
+        public byte Difficulty;
+        public bool ShowCape;
+
+        public int Id { get { return 0xCC; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Locale = stream.ReadString();
+            ViewDistance = stream.ReadUInt8();
+            ChatFlags = stream.ReadUInt8();
+            Difficulty = stream.ReadUInt8();
+            ShowCape = stream.ReadBoolean();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(Locale);
+            stream.WriteUInt8(ViewDistance);
+            stream.WriteUInt8(ChatFlags);
+            stream.WriteUInt8(Difficulty);
+            stream.WriteBoolean(ShowCape);
+        }
+    }
+
+    public struct ClientStatusPacket : IPacket
+    {
+        public byte Payload;
+
+        public int Id { get { return 0xCD; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Payload = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Payload);
+        }
+    }
+
+    public struct PluginMessage : IPacket
+    {
+        public string Channel;
+        public byte[] Data;
+
+        public int Id { get { return 0xFA; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Channel = stream.ReadString();
+            var length = stream.ReadInt16();
+            Data = stream.ReadUInt8Array(length);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(Channel);
+            stream.WriteInt16((short)Data.Length);
+            stream.WriteUInt8Array(Data);
+        }
+    }
+
+    public struct EncryptionKeyResponsePacket : IPacket
+    {
+        public byte[] SharedSecret;
+        public byte[] VerificationToken;
+
+        public int Id { get { return 0xFC; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            var ssLength = stream.ReadInt16();
+            SharedSecret = stream.ReadUInt8Array(ssLength);
+            var vtLength = stream.ReadInt16();
+            VerificationToken = stream.ReadUInt8Array(vtLength);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteInt16((short)SharedSecret.Length);
+            stream.WriteUInt8Array(SharedSecret);
+            stream.WriteInt16((short)VerificationToken.Length);
+            stream.WriteUInt8Array(VerificationToken);
+        }
+    }
+
+    public struct EncryptionKeyRequestPacket : IPacket
+    {
+        public string ServerId;
+        public byte[] PublicKey;
+        public byte[] VerificationToken;
+
+        public int Id { get { return 0xFD; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            ServerId = stream.ReadString();
+            var pkLength = stream.ReadInt16();
+            PublicKey = stream.ReadUInt8Array(pkLength);
+            var vtLength = stream.ReadInt16();
+            VerificationToken = stream.ReadUInt8Array(vtLength);
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(ServerId);
+            stream.WriteInt16((short)PublicKey.Length);
+            stream.WriteUInt8Array(PublicKey);
+            stream.WriteInt16((short)VerificationToken.Length);
+            stream.WriteUInt8Array(VerificationToken);
+        }
+    }
+
+    public struct ServerListPingPacket : IPacket
+    {
+        public byte Magic;
+
+        public int Id { get { return 0xFE; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Magic = stream.ReadUInt8();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteUInt8(Magic);
+        }
+    }
+
+    public struct DisconnectPacket : IPacket
+    {
+        public string Reason;
+
+        public int Id { get { return 0xFF; } }
+
+        public void ReadPacket(MinecraftStream stream)
+        {
+            Reason = stream.ReadString();
+        }
+
+        public void WritePacket(MinecraftStream stream)
+        {
+            stream.WriteString(Reason);
         }
     }
 }
