@@ -52,8 +52,11 @@ namespace SMProxy
             if (!Client.DataAvailable)
                 return;
             var packet = PacketReader.ReadPacket(ClientStream);
+            // WritePacket doesn't include the packet ID, just the payload
             ServerStream.WriteUInt8(packet.Id);
             packet.WritePacket(ServerStream);
+            // We use a BufferedStream to make sure packets get sent in one piece, rather than
+            // a field at a time. Flushing it here sends the assembled packet.
             ServerStream.Flush();
             Console.WriteLine(packet.GetType().Name);
         }
