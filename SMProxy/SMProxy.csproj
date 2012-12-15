@@ -58,6 +58,7 @@
     <Compile Include="Metadata\MetadataString.cs" />
     <Compile Include="MinecraftStream.cs" />
     <Compile Include="MinecraftStream.Stream.cs" />
+    <Compile Include="PacketReader.cs" />
     <Compile Include="Packets.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,9 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\externals\libnbt\LibNbt\LibNbt.csproj">
