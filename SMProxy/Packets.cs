@@ -10,7 +10,7 @@ namespace SMProxy
 {
     public interface IPacket
     {
-        int Id { get; }
+        byte Id { get; }
         void ReadPacket(MinecraftStream stream);
         void WritePacket(MinecraftStream stream);
     }
@@ -19,7 +19,7 @@ namespace SMProxy
     {
         public int KeepAlive;
 
-        public int Id { get { return 0x00; } }
+        public byte Id { get { return 0x00; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -42,7 +42,7 @@ namespace SMProxy
         public byte Discarded;
         public byte MaxPlayers;
 
-        public int Id { get { return 0x01; } }
+        public byte Id { get { return 0x01; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -74,7 +74,7 @@ namespace SMProxy
         public string ServerHostname;
         public int ServerPort;
 
-        public int Id { get { return 0x02; } }
+        public byte Id { get { return 0x02; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -97,7 +97,7 @@ namespace SMProxy
     {
         public string Message;
 
-        public int Id { get { return 0x03; } }
+        public byte Id { get { return 0x03; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -114,7 +114,7 @@ namespace SMProxy
     {
         public long WorldAge, TimeOfDay;
 
-        public int Id { get { return 0x04; } }
+        public byte Id { get { return 0x04; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -135,7 +135,7 @@ namespace SMProxy
         public short SlotIndex;
         public Slot Slot;
 
-        public int Id { get { return 0x05; } }
+        public byte Id { get { return 0x05; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -156,7 +156,7 @@ namespace SMProxy
     {
         public int X, Y, Z;
 
-        public int Id { get { return 0x06; } }
+        public byte Id { get { return 0x06; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -178,7 +178,7 @@ namespace SMProxy
         public int User, Target;
         public bool MouseButton;
 
-        public int Id { get { return 0x07; } }
+        public byte Id { get { return 0x07; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -200,7 +200,7 @@ namespace SMProxy
         public short Health, Food;
         public float FoodSaturation;
 
-        public int Id { get { return 0x08; } }
+        public byte Id { get { return 0x08; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -225,7 +225,7 @@ namespace SMProxy
         public short WorldHeight;
         public string LevelType;
 
-        public int Id { get { return 0x09; } }
+        public byte Id { get { return 0x09; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -250,7 +250,7 @@ namespace SMProxy
     {
         public bool OnGround;
 
-        public int Id { get { return 0x0A; } }
+        public byte Id { get { return 0x0A; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -268,7 +268,7 @@ namespace SMProxy
         public double X, Y, Stance, Z;
         public bool OnGround;
 
-        public int Id { get { return 0x0B; } }
+        public byte Id { get { return 0x0B; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -294,7 +294,7 @@ namespace SMProxy
         public float Yaw, Pitch;
         public bool OnGround;
 
-        public int Id { get { return 0x0C; } }
+        public byte Id { get { return 0x0C; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -317,7 +317,7 @@ namespace SMProxy
         public float Yaw, Pitch;
         public bool OnGround;
 
-        public int Id { get { return 0x0D; } }
+        public byte Id { get { return 0x0D; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -351,7 +351,7 @@ namespace SMProxy
         public int Z;
         public byte Face;
 
-        public int Id { get { return 0x0E; } }
+        public byte Id { get { return 0x0E; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -383,7 +383,7 @@ namespace SMProxy
         public byte CursorY;
         public byte CursorZ;
 
-        public int Id { get { return 0x0F; } }
+        public byte Id { get { return 0x0F; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -414,7 +414,7 @@ namespace SMProxy
     {
         public short SlotIndex;
 
-        public int Id { get { return 0x10; } }
+        public byte Id { get { return 0x10; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -435,7 +435,7 @@ namespace SMProxy
         public byte Y;
         public int Z;
 
-        public int Id { get { return 0x11; } }
+        public byte Id { get { return 0x11; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -461,7 +461,7 @@ namespace SMProxy
         public int EntityId;
         public byte Animation;
 
-        public int Id { get { return 0x12; } }
+        public byte Id { get { return 0x12; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -481,7 +481,7 @@ namespace SMProxy
         public int EntityId;
         public byte ActionId;
 
-        public int Id { get { return 0x13; } }
+        public byte Id { get { return 0x13; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -505,7 +505,7 @@ namespace SMProxy
         public short HeldItem;
         public MetadataDictionary Metadata;
 
-        public int Id { get { return 0x14; } }
+        public byte Id { get { return 0x14; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -543,7 +543,7 @@ namespace SMProxy
         public byte Pitch;
         public byte Roll;
 
-        public int Id { get { return 0x15; } }
+        public byte Id { get { return 0x15; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -575,7 +575,7 @@ namespace SMProxy
         public int ItemId;
         public int PlayerId;
 
-        public int Id { get { return 0x16; } }
+        public byte Id { get { return 0x16; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -598,7 +598,7 @@ namespace SMProxy
         public int Metadata;
         public short? SpeedX, SpeedY, SpeedZ;
 
-        public int Id { get { return 0x17; } }
+        public byte Id { get { return 0x17; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -642,7 +642,7 @@ namespace SMProxy
         public short VelocityX, VelocityY, VelocityZ;
         public MetadataDictionary Metadata;
 
-        public int Id { get { return 0x18; } }
+        public byte Id { get { return 0x18; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -682,7 +682,7 @@ namespace SMProxy
         public int X, Y, Z;
         public int Direction;
 
-        public int Id { get { return 0x19; } }
+        public byte Id { get { return 0x19; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -711,7 +711,7 @@ namespace SMProxy
         public int X, Y, Z;
         public short Count;
 
-        public int Id { get { return 0x1A; } }
+        public byte Id { get { return 0x1A; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -737,7 +737,7 @@ namespace SMProxy
         public int EntityId;
         public short VelocityX, VelocityY, VelocityZ;
 
-        public int Id { get { return 0x1C; } }
+        public byte Id { get { return 0x1C; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -760,7 +760,7 @@ namespace SMProxy
     {
         public int[] EntityIds;
 
-        public int Id { get { return 0x1D; } }
+        public byte Id { get { return 0x1D; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -779,7 +779,7 @@ namespace SMProxy
     {
         public int EntityId;
 
-        public int Id { get { return 0x1E; } }
+        public byte Id { get { return 0x1E; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -797,7 +797,7 @@ namespace SMProxy
         public int EntityId;
         public sbyte DeltaX, DeltaY, DeltaZ;
 
-        public int Id { get { return 0x1F; } }
+        public byte Id { get { return 0x1F; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -821,7 +821,7 @@ namespace SMProxy
         public int EntityId;
         public byte Yaw, Pitch;
 
-        public int Id { get { return 0x20; } }
+        public byte Id { get { return 0x20; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -844,7 +844,7 @@ namespace SMProxy
         public sbyte DeltaX, DeltaY, DeltaZ;
         public byte Yaw, Pitch;
 
-        public int Id { get { return 0x21; } }
+        public byte Id { get { return 0x21; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -873,7 +873,7 @@ namespace SMProxy
         public int X, Y, Z;
         public byte Yaw, Pitch;
 
-        public int Id { get { return 0x22; } }
+        public byte Id { get { return 0x22; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -901,7 +901,7 @@ namespace SMProxy
         public int EntityId;
         public byte HeadYaw;
 
-        public int Id { get { return 0x23; } }
+        public byte Id { get { return 0x23; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -921,7 +921,7 @@ namespace SMProxy
         public int EntityId;
         public byte Status;
 
-        public int Id { get { return 0x26; } }
+        public byte Id { get { return 0x26; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -940,7 +940,7 @@ namespace SMProxy
     {
         public int EntityId, VehicleId;
 
-        public int Id { get { return 0x27; } }
+        public byte Id { get { return 0x27; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -960,7 +960,7 @@ namespace SMProxy
         public int EntityId;
         public MetadataDictionary Metadata;
 
-        public int Id { get { return 0x28; } }
+        public byte Id { get { return 0x28; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -982,7 +982,7 @@ namespace SMProxy
         public byte Amplifier;
         public short Duration;
 
-        public int Id { get { return 0x29; } }
+        public byte Id { get { return 0x29; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1006,7 +1006,7 @@ namespace SMProxy
         public int EntityId;
         public byte EffectId;
 
-        public int Id { get { return 0x2A; } }
+        public byte Id { get { return 0x2A; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1027,7 +1027,7 @@ namespace SMProxy
         public short Level;
         public short TotalExperience;
 
-        public int Id { get { return 0x2B; } }
+        public byte Id { get { return 0x2B; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1056,7 +1056,7 @@ namespace SMProxy
         public ushort AddBitMap;
         public byte[] Data;
 
-        public int Id { get { return 0x33; } }
+        public byte Id { get { return 0x33; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1085,7 +1085,7 @@ namespace SMProxy
         public short RecordCount;
         public int[] Data; // TODO: Display this in a friendly manner
 
-        public int Id { get { return 0x34; } }
+        public byte Id { get { return 0x34; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1114,7 +1114,7 @@ namespace SMProxy
         public short BlockType;
         public byte BlockMetadata;
 
-        public int Id { get { return 0x35; } }
+        public byte Id { get { return 0x35; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1144,7 +1144,7 @@ namespace SMProxy
         public byte Data2; // TODO: Perhaps expand on this
         public short BlockId;
 
-        public int Id { get { return 0x36; } }
+        public byte Id { get { return 0x36; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1173,7 +1173,7 @@ namespace SMProxy
         public int X, Y, Z;
         public byte DestroyStage;
 
-        public int Id { get { return 0x37; } }
+        public byte Id { get { return 0x37; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1201,7 +1201,7 @@ namespace SMProxy
         public byte[] ChunkData;
         public byte[] ChunkMetadata;
 
-        public int Id { get { return 0x38; } }
+        public byte Id { get { return 0x38; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1228,7 +1228,7 @@ namespace SMProxy
         public byte[] Records; // TODO: Consider making more detailed
         public float PlayerVelocityX, PlayerVelocityY, PlayerVelocityZ;
 
-        public int Id { get { return 0x3C; } }
+        public byte Id { get { return 0x3C; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1262,7 +1262,7 @@ namespace SMProxy
         public int Data;
         public bool DisableRelativeVolume;
 
-        public int Id { get { return 0x3D; } }
+        public byte Id { get { return 0x3D; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1292,7 +1292,7 @@ namespace SMProxy
         public float Volume;
         public byte Pitch;
 
-        public int Id { get { return 0x3E; } }
+        public byte Id { get { return 0x3E; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1320,7 +1320,7 @@ namespace SMProxy
         // TODO: Expand upon this, list reason from enum
         public byte State, GameMode;
 
-        public int Id { get { return 0x46; } }
+        public byte Id { get { return 0x46; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1341,7 +1341,7 @@ namespace SMProxy
         public byte Type;
         public int X, Y, Z;
 
-        public int Id { get { return 0x47; } }
+        public byte Id { get { return 0x47; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1369,7 +1369,7 @@ namespace SMProxy
         public string WindowTitle;
         public byte SlotCount;
 
-        public int Id { get { return 0x64; } }
+        public byte Id { get { return 0x64; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1392,7 +1392,7 @@ namespace SMProxy
     {
         public byte WindowId;
 
-        public int Id { get { return 0x65; } }
+        public byte Id { get { return 0x65; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1414,7 +1414,7 @@ namespace SMProxy
         public bool Shift;
         public Slot ClickedItem;
 
-        public int Id { get { return 0x66; } }
+        public byte Id { get { return 0x66; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1443,7 +1443,7 @@ namespace SMProxy
         public short SlotIndex;
         public Slot Item;
 
-        public int Id { get { return 0x67; } }
+        public byte Id { get { return 0x67; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1466,7 +1466,7 @@ namespace SMProxy
         public short Count;
         public Slot[] Items;
 
-        public int Id { get { return 0x68; } }
+        public byte Id { get { return 0x68; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1492,7 +1492,7 @@ namespace SMProxy
         public short PropertyId;
         public short Value;
 
-        public int Id { get { return 0x69; } }
+        public byte Id { get { return 0x69; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1515,7 +1515,7 @@ namespace SMProxy
         public short ActionNumber;
         public bool Accepted;
 
-        public int Id { get { return 0x6A; } }
+        public byte Id { get { return 0x6A; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1537,7 +1537,7 @@ namespace SMProxy
         public short SlotIndex;
         public Slot Item;
 
-        public int Id { get { return 0x6B; } }
+        public byte Id { get { return 0x6B; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1557,7 +1557,7 @@ namespace SMProxy
         public byte WindowId;
         public byte Enchantment;
 
-        public int Id { get { return 0x6C; } }
+        public byte Id { get { return 0x6C; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1579,7 +1579,7 @@ namespace SMProxy
         public int Z;
         public string Text1, Text2, Text3, Text4;
 
-        public int Id { get { return 0x82; } }
+        public byte Id { get { return 0x82; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1609,7 +1609,7 @@ namespace SMProxy
         public short ItemType, ItemId;
         public string Text;
 
-        public int Id { get { return 0x83; } }
+        public byte Id { get { return 0x83; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1636,7 +1636,7 @@ namespace SMProxy
         public byte Action;
         public NbtFile Nbt;
 
-        public int Id { get { return 0x84; } }
+        public byte Id { get { return 0x84; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1668,7 +1668,7 @@ namespace SMProxy
         public int StatisticId;
         public byte Amount;
 
-        public int Id { get { return 0xC8; } }
+        public byte Id { get { return 0xC8; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1689,7 +1689,7 @@ namespace SMProxy
         public bool Online;
         public short Ping;
 
-        public int Id { get { return 0xC9; } }
+        public byte Id { get { return 0xC9; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1712,7 +1712,7 @@ namespace SMProxy
         public byte Flags;
         public byte FlyingSpeed, WalkingSpeed;
 
-        public int Id { get { return 0xCA; } }
+        public byte Id { get { return 0xCA; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1733,7 +1733,7 @@ namespace SMProxy
     {
         public string Text;
 
-        public int Id { get { return 0xCB; } }
+        public byte Id { get { return 0xCB; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1755,7 +1755,7 @@ namespace SMProxy
         public byte Difficulty;
         public bool ShowCape;
 
-        public int Id { get { return 0xCC; } }
+        public byte Id { get { return 0xCC; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1780,7 +1780,7 @@ namespace SMProxy
     {
         public byte Payload;
 
-        public int Id { get { return 0xCD; } }
+        public byte Id { get { return 0xCD; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1798,7 +1798,7 @@ namespace SMProxy
         public string Channel;
         public byte[] Data;
 
-        public int Id { get { return 0xFA; } }
+        public byte Id { get { return 0xFA; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1820,7 +1820,7 @@ namespace SMProxy
         public byte[] SharedSecret;
         public byte[] VerificationToken;
 
-        public int Id { get { return 0xFC; } }
+        public byte Id { get { return 0xFC; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1845,7 +1845,7 @@ namespace SMProxy
         public byte[] PublicKey;
         public byte[] VerificationToken;
 
-        public int Id { get { return 0xFD; } }
+        public byte Id { get { return 0xFD; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1870,7 +1870,7 @@ namespace SMProxy
     {
         public byte Magic;
 
-        public int Id { get { return 0xFE; } }
+        public byte Id { get { return 0xFE; } }
 
         public void ReadPacket(MinecraftStream stream)
         {
@@ -1887,7 +1887,7 @@ namespace SMProxy
     {
         public string Reason;
 
-        public int Id { get { return 0xFF; } }
+        public byte Id { get { return 0xFF; } }
 
         public void ReadPacket(MinecraftStream stream)
         {

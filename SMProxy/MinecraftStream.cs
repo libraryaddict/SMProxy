@@ -48,7 +48,7 @@ namespace SMProxy
         {
             Write(new[]
             {
-                (byte)(value & 0xFF00 >> 8),
+                (byte)((value & 0xFF00) >> 8),
                 (byte)(value & 0xFF)
             }, 0, 2);
         }
@@ -76,9 +76,9 @@ namespace SMProxy
         {
             Write(new[]
             {
-                (byte)(value & 0xFF000000 >> 24),
-                (byte)(value & 0xFF0000 >> 16),
-                (byte)(value & 0xFF00 >> 8),
+                (byte)((value & 0xFF000000) >> 24),
+                (byte)((value & 0xFF0000) >> 16),
+                (byte)((value & 0xFF00) >> 8),
                 (byte)(value & 0xFF)
             }, 0, 4);
         }
@@ -110,13 +110,13 @@ namespace SMProxy
         {
             Write(new[]
             {
-                (byte)(value & 0xFF00000000000000 >> 56),
-                (byte)(value & 0xFF000000000000 >> 48),
-                (byte)(value & 0xFF0000000000 >> 40),
-                (byte)(value & 0xFF00000000 >> 32),
-                (byte)(value & 0xFF000000 >> 24),
-                (byte)(value & 0xFF0000 >> 16),
-                (byte)(value & 0xFF00 >> 8),
+                (byte)((value & 0xFF00000000000000) >> 56),
+                (byte)((value & 0xFF000000000000) >> 48),
+                (byte)((value & 0xFF0000000000) >> 40),
+                (byte)((value & 0xFF00000000) >> 32),
+                (byte)((value & 0xFF000000) >> 24),
+                (byte)((value & 0xFF0000) >> 16),
+                (byte)((value & 0xFF00) >> 8),
                 (byte)(value & 0xFF)
             }, 0, 8);
         }

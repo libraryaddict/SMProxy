@@ -22,8 +22,8 @@ namespace SMProxy
         {
             Client = client;
             Server = server;
-            ClientStream = new MinecraftStream(Client);
-            ServerStream = new MinecraftStream(Server);
+            ClientStream = new MinecraftStream(new BufferedStream(Client));
+            ServerStream = new MinecraftStream(new BufferedStream(Server));
         }
 
         public void Start()
@@ -41,6 +41,9 @@ namespace SMProxy
             // TODO: Fallback to raw proxy
             UpdateServer();
             UpdateClient();
+            // We do the timer this way in case there's some enormous packet or something that takes more than
+            // MillisecondsBetweenUpdates to deal with. This way, we don't have a race condition where Tick is
+            // running several times simultaneously.
             Timer.Change(MillisecondsBetweenUpdates, Timeout.Infinite);
         }
 
@@ -49,7 +52,10 @@ namespace SMProxy
             if (!Client.DataAvailable)
                 return;
             var packet = PacketReader.ReadPacket(ClientStream);
+            ServerStream.WriteUInt8(packet.Id);
             packet.WritePacket(ServerStream);
+            ServerStream.Flush();
+            Console.WriteLine(packet.GetType().Name);
         }
 
         private void UpdateServer()
@@ -57,7 +63,10 @@ namespace SMProxy
             if (!Server.DataAvailable)
                 return;
             var packet = PacketReader.ReadPacket(ServerStream);
+            ClientStream.WriteUInt8(packet.Id);
             packet.WritePacket(ClientStream);
+            ClientStream.Flush();
+            Console.WriteLine(packet.GetType().Name);
         }
     }
 }
