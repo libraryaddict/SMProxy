@@ -28,6 +28,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(KeepAlive);
         }
     }
@@ -57,6 +58,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteString(LevelType);
             stream.WriteUInt8((byte)GameMode);
@@ -86,6 +88,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(ProtocolVersion);
             stream.WriteString(Username);
             stream.WriteString(ServerHostname);
@@ -106,6 +109,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(Message);
         }
     }
@@ -124,6 +128,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt64(WorldAge);
             stream.WriteInt64(TimeOfDay);
         }
@@ -146,6 +151,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt16(SlotIndex);
             Slot.WriteTo(stream);
@@ -167,6 +173,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
             stream.WriteInt32(Z);
@@ -189,6 +196,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(User);
             stream.WriteInt32(Target);
             stream.WriteBoolean(MouseButton);
@@ -211,6 +219,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt16(Health);
             stream.WriteInt16(Food);
             stream.WriteSingle(FoodSaturation);
@@ -238,6 +247,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32((int)Dimension);
             stream.WriteInt8((sbyte)Difficulty);
             stream.WriteInt8((sbyte)GameMode);
@@ -259,6 +269,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteBoolean(OnGround);
         }
     }
@@ -281,6 +292,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteDouble(X);
             stream.WriteDouble(Y);
             stream.WriteDouble(Stance);
@@ -305,6 +317,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteSingle(Yaw);
             stream.WriteSingle(Pitch);
             stream.WriteBoolean(OnGround);
@@ -333,6 +346,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteDouble(X);
             stream.WriteDouble(Y);
             stream.WriteDouble(Stance);
@@ -364,6 +378,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(Status);
             stream.WriteInt32(X);
             stream.WriteUInt8(Y);
@@ -399,6 +414,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteUInt8(Y);
             stream.WriteInt32(Z);
@@ -423,6 +439,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt16(SlotIndex);
         }
     }
@@ -448,6 +465,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(Unknown);
             stream.WriteInt32(X);
@@ -471,6 +489,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(Animation);
         }
@@ -491,6 +510,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(ActionId);
         }
@@ -522,6 +542,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteString(PlayerName);
             stream.WriteInt32(X);
@@ -559,6 +580,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             Item.WriteTo(stream);
             stream.WriteInt32(X);
@@ -585,6 +607,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(ItemId);
             stream.WriteInt32(PlayerId);
         }
@@ -618,6 +641,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(Type);
             stream.WriteInt32(X);
@@ -661,6 +685,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(Type);
             stream.WriteInt32(X);
@@ -696,6 +721,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteString(Title);
             stream.WriteInt32(X);
@@ -724,6 +750,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
@@ -749,6 +776,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(VelocityX);
             stream.WriteInt32(VelocityY);
@@ -770,6 +798,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8((byte)EntityIds.Length);
             stream.WriteInt32Array(EntityIds);
         }
@@ -788,6 +817,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
         }
     }
@@ -809,6 +839,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt8(DeltaX);
             stream.WriteInt8(DeltaY);
@@ -832,6 +863,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(Yaw);
             stream.WriteUInt8(Pitch);
@@ -858,6 +890,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt8(DeltaX);
             stream.WriteInt8(DeltaY);
@@ -887,6 +920,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
@@ -911,6 +945,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(HeadYaw);
         }
@@ -931,6 +966,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(Status);
         }
@@ -950,6 +986,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(VehicleId);
         }
@@ -970,6 +1007,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             Metadata.WriteTo(stream);
         }
@@ -994,6 +1032,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(EffectId);
             stream.WriteUInt8(Amplifier);
@@ -1016,6 +1055,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(EffectId);
         }
@@ -1038,6 +1078,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteSingle(ExperienceBar);
             stream.WriteInt16(Level);
             stream.WriteInt16(TotalExperience);
@@ -1070,6 +1111,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteInt32(Z);
             stream.WriteUInt16(PrimaryBitMap);
@@ -1098,6 +1140,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(ChunkX);
             stream.WriteInt32(ChunkZ);
             stream.WriteInt16(RecordCount);
@@ -1127,6 +1170,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteUInt8(Y);
             stream.WriteInt32(Z);
@@ -1158,6 +1202,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteInt16(Y);
             stream.WriteInt32(Z);
@@ -1186,6 +1231,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
@@ -1213,6 +1259,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt16(ChunkCount);
             stream.WriteInt32(ChunkData.Length);
             stream.WriteUInt8Array(ChunkData);
@@ -1244,6 +1291,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteDouble(X);
             stream.WriteDouble(Y);
             stream.WriteDouble(Z);
@@ -1276,6 +1324,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
@@ -1306,6 +1355,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(SoundName);
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
@@ -1330,6 +1380,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(State);
             stream.WriteUInt8(GameMode);
         }
@@ -1354,6 +1405,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteUInt8(Type);
             stream.WriteInt32(X);
@@ -1381,6 +1433,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
             stream.WriteUInt8(InventoryType);
             stream.WriteString(WindowTitle);
@@ -1401,6 +1454,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
         }
     }
@@ -1428,6 +1482,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
             stream.WriteInt16(SlotIndex);
             stream.WriteUInt8(MouseButton);
@@ -1454,6 +1509,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
             stream.WriteInt16(SlotIndex);
             Item.WriteTo(stream);
@@ -1479,6 +1535,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
             stream.WriteInt16(Count);
             for (int i = 0; i < Count; i++)
@@ -1503,6 +1560,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
             stream.WriteInt16(PropertyId);
             stream.WriteInt16(Value);
@@ -1526,6 +1584,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
             stream.WriteInt16(ActionNumber);
             stream.WriteBoolean(Accepted);
@@ -1547,6 +1606,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt16(SlotIndex);
             Item.WriteTo(stream);
         }
@@ -1567,6 +1627,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(WindowId);
             stream.WriteUInt8(Enchantment);
         }
@@ -1594,6 +1655,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteInt16(Y);
             stream.WriteInt32(Z);
@@ -1621,6 +1683,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt16(ItemType);
             stream.WriteInt16(ItemId);
             stream.WriteInt16((short)Text.Length);
@@ -1651,6 +1714,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteInt16(Y);
             stream.WriteInt32(Z);
@@ -1678,6 +1742,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt32(StatisticId);
             stream.WriteUInt8(Amount);
         }
@@ -1700,6 +1765,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(PlayerName);
             stream.WriteBoolean(Online);
             stream.WriteInt16(Ping);
@@ -1723,6 +1789,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(Flags);
             stream.WriteUInt8(FlyingSpeed);
             stream.WriteUInt8(WalkingSpeed);
@@ -1742,6 +1809,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(Text);
         }
     }
@@ -1768,6 +1836,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(Locale);
             stream.WriteUInt8(ViewDistance);
             stream.WriteUInt8(ChatFlags);
@@ -1789,6 +1858,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(Payload);
         }
     }
@@ -1809,6 +1879,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(Channel);
             stream.WriteInt16((short)Data.Length);
             stream.WriteUInt8Array(Data);
@@ -1832,6 +1903,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteInt16((short)SharedSecret.Length);
             stream.WriteUInt8Array(SharedSecret);
             stream.WriteInt16((short)VerificationToken.Length);
@@ -1858,6 +1930,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(ServerId);
             stream.WriteInt16((short)PublicKey.Length);
             stream.WriteUInt8Array(PublicKey);
@@ -1879,6 +1952,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteUInt8(Magic);
         }
     }
@@ -1896,6 +1970,7 @@ namespace SMProxy
 
         public void WritePacket(MinecraftStream stream)
         {
+            stream.WriteUInt8(Id);
             stream.WriteString(Reason);
         }
     }

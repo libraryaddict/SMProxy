@@ -133,9 +133,10 @@ namespace SMProxy
 
         public byte[] ReadUInt8Array(int length)
         {
-            var buffer = new byte[length];
-            Read(buffer, 0, length);
-            return buffer;
+            var result = new byte[length];
+            if (length == 0) return result;
+            Read(result, 0, length);
+            return result;
         }
 
         public void WriteUInt8Array(byte[] value)
@@ -156,6 +157,7 @@ namespace SMProxy
         public ushort[] ReadUInt16Array(int length)
         {
             var result = new ushort[length];
+            if (length == 0) return result;
             for (int i = 0; i < length; i++)
                 result[i] = ReadUInt16();
             return result;
@@ -180,6 +182,7 @@ namespace SMProxy
         public uint[] ReadUInt32Array(int length)
         {
             var result = new uint[length];
+            if (length == 0) return result;
             for (int i = 0; i < length; i++)
                 result[i] = ReadUInt32();
             return result;
@@ -204,6 +207,7 @@ namespace SMProxy
         public ulong[] ReadUInt64Array(int length)
         {
             var result = new ulong[length];
+            if (length == 0) return result;
             for (int i = 0; i < length; i++)
                 result[i] = ReadUInt64();
             return result;

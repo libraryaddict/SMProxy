@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AesStream.cs" />
     <Compile Include="Attributes.cs" />
+    <Compile Include="BigInteger.cs" />
     <Compile Include="BufferedStream.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="DataUtility.cs" />
