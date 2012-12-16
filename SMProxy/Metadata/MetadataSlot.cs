@@ -29,7 +29,7 @@ namespace SMProxy.Metadata
             byte count;
             if (!DataUtility.TryReadInt16(buffer, ref offset, out id))
                 return false;
-            if (id == 0xFFFF)
+            if (id == -1)
                 return true;
             if (!DataUtility.TryReadByte(buffer, ref offset, out count))
                 return false;

@@ -16,7 +16,7 @@ namespace SMProxy
         static void Main(string[] args)
         {
             // Test code; will be more customizable later
-            Listener = new TcpListener(25564);
+            Listener = new TcpListener(IPAddress.Loopback, 25564);
             Sessions = new List<Proxy>();
             Listener.Start();
             Listener.BeginAcceptTcpClient(AcceptClient, null);

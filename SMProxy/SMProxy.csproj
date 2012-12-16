@@ -46,6 +46,7 @@
     <Compile Include="AesStream.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="BufferedStream.cs" />
+    <Compile Include="Cryptography.cs" />
     <Compile Include="DataUtility.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Metadata\MetadataByte.cs" />
