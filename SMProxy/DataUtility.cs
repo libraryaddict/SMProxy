@@ -10,6 +10,7 @@ namespace SMProxy
     /// Minecraft data.
     /// </summary>
     // Taken from Craft.Net
+    // TODO: Phase this out, it's only required by Metadata, and probably not to a significant degree.
     public static class DataUtility
     {
         /// <summary>
