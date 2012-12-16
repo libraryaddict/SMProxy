@@ -50,6 +50,7 @@
     <Compile Include="Cryptography.cs" />
     <Compile Include="DataUtility.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Metadata\MetadataByte.cs" />
     <Compile Include="Metadata\MetadataDictionary.cs" />
     <Compile Include="Metadata\MetadataEntry.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -36,10 +37,16 @@ namespace SMProxy
             // Connect to remote
             var server = new TcpClient();
             server.Connect(new IPEndPoint(IPAddress.Loopback, 25565));
-            var proxy = new Proxy(client.GetStream(), server.GetStream());
+            var proxy = new Proxy(client.GetStream(), server.GetStream(), 
+                new Log(new StreamWriter(GetLogName())));
             Sessions.Add(proxy);
             proxy.Start();
             Listener.BeginAcceptTcpClient(AcceptClient, null);
+        }
+
+        private static string GetLogName()
+        {
+            return "log_" + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".txt";
         }
 
 #if DEBUG

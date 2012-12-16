@@ -16,6 +16,7 @@ namespace SMProxy
         public Timer Timer { get; set; }
         public NetworkStream Client { get; set; }
         public NetworkStream Server { get; set; }
+        public Log Log { get; set; }
         private MinecraftStream ClientStream { get; set; }
         private MinecraftStream ServerStream { get; set; }
         private byte[] ServerSharedKey { get; set; }
@@ -27,10 +28,11 @@ namespace SMProxy
         private EncryptionKeyResponsePacket ServerEncryptionResponse { get; set; }
         private byte[] ClientVerificationToken { get; set; }
 
-        public Proxy(NetworkStream client, NetworkStream server)
+        public Proxy(NetworkStream client, NetworkStream server, Log log)
         {
             Client = client;
             Server = server;
+            Log = log;
             ClientStream = new MinecraftStream(new BufferedStream(Client));
             ServerStream = new MinecraftStream(new BufferedStream(Server));
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
@@ -63,13 +65,12 @@ namespace SMProxy
             if (!Client.DataAvailable)
                 return;
             var packet = PacketReader.ReadPacket(ClientStream);
-            Console.WriteLine("[CLIENT->SERVER]: " + packet.GetType().Name);
+            Log.LogPacket(packet, true);
 
             if (packet is EncryptionKeyResponsePacket)
                 FinializeClientEncryption((EncryptionKeyResponsePacket)packet);
             else
             {
-                Console.WriteLine("Packet proxied.");
                 packet.WritePacket(ServerStream);
                 // We use a BufferedStream to make sure packets get sent in one piece, rather than
                 // a field at a time. Flushing it here sends the assembled packet.
@@ -82,7 +83,7 @@ namespace SMProxy
             if (!Server.DataAvailable)
                 return;
             var packet = PacketReader.ReadPacket(ServerStream);
-            Console.WriteLine("[SERVER->CLIENT]: " + packet.GetType().Name);
+            Log.LogPacket(packet, false);
 
             if (packet is EncryptionKeyRequestPacket)
                 InitializeEncryption((EncryptionKeyRequestPacket)packet);
@@ -90,7 +91,6 @@ namespace SMProxy
                 FinializeServerEncryption((EncryptionKeyResponsePacket)packet);
             else
             {
-                Console.WriteLine("Packet proxied.");
                 packet.WritePacket(ClientStream);
                 ClientStream.Flush();
             }
