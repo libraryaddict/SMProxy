@@ -13,12 +13,18 @@ namespace SMProxy
     {
         private CryptoStream decryptStream { get; set; }
         private CryptoStream encryptStream { get; set; }
-        private byte[] key { get; set; }
+        internal byte[] Key { get; set; }
 
         public AesStream(Stream stream, byte[] key)
         {
             BaseStream = stream;
             Key = key;
+            var rijndael = GenerateAES(key);
+            var encryptTransform = rijndael.CreateEncryptor();
+            var decryptTransform = rijndael.CreateDecryptor();
+
+            encryptStream = new CryptoStream(BaseStream, encryptTransform, CryptoStreamMode.Write);
+            decryptStream = new CryptoStream(BaseStream, decryptTransform, CryptoStreamMode.Read);
         }
 
         public Stream BaseStream { get; set; }
@@ -33,21 +39,6 @@ namespace SMProxy
             cipher.Key = cipher.IV = key;
 
             return cipher;
-        }
-
-        internal byte[] Key
-        {
-            get { return key; }
-            set
-            {
-                key = value;
-                var rijndael = GenerateAES(value);
-                var encryptTransform = rijndael.CreateEncryptor();
-                var decryptTransform = rijndael.CreateDecryptor();
-
-                encryptStream = new CryptoStream(BaseStream, encryptTransform, CryptoStreamMode.Write);
-                decryptStream = new CryptoStream(BaseStream, decryptTransform, CryptoStreamMode.Read);
-            }
         }
 
         public override bool CanRead
