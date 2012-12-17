@@ -56,7 +56,10 @@ namespace SMProxy
             stream.WriteInt8(Count);
             stream.WriteInt16(Metadata);
             if (Nbt == null)
+            {
+                stream.WriteInt16(-1);
                 return;
+            }
             var mStream = new MemoryStream();
             Nbt.SaveToStream(mStream, NbtCompression.GZip);
             var buffer = mStream.GetBuffer();
