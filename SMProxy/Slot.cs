@@ -73,5 +73,16 @@ namespace SMProxy
         public sbyte Count;
         public short Metadata;
         public NbtFile Nbt;
+
+        public override string ToString()
+        {
+            if (Empty)
+                return "(Empty)";
+            string result = "ID: " + Id;
+            if (Count != 1) result += "; Count: " + Count;
+            if (Metadata != 0) result += "; Metadata: " + Metadata;
+            if (Nbt != null) result += Environment.NewLine + Nbt.ToString();
+            return "(" + result + ")";
+        }
     }
 }

@@ -44,14 +44,30 @@ namespace SMProxy
             {
                 var name = field.Name;
                 name = AddSpaces(name);
-
-                Stream.Write(string.Format(" {0} ({1})", name, field.FieldType.Name));
-
                 var fValue = field.GetValue(packet);
+
+                if (!(fValue is Array))
+                    Stream.Write(string.Format(" {0} ({1})", name, field.FieldType.Name));
+                else
+                {
+                    var array = fValue as Array;
+                    Stream.Write(string.Format(" {0} ({1}[{2}])", name, 
+                        array.GetType().GetElementType().Name, array.Length));
+                }
+
                 string fieldValue = fValue.ToString();
                 if (fValue is byte[])
                     fieldValue = DumpArray(fValue as byte[]);
-                Stream.Write(": " + fieldValue + "\n");
+                else if (fValue is Array)
+                {
+                    Stream.Write(": ");
+                    var array = fValue as Array;
+                    foreach (var item in array)
+                        Stream.Write(string.Format("{0}, ", item.ToString()));
+                    Stream.WriteLine();
+                }
+                else
+                    Stream.Write(": " + fieldValue + "\n");
             }
             Stream.WriteLine();
             Stream.Flush();
