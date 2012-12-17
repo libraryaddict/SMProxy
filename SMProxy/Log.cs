@@ -55,9 +55,8 @@ namespace SMProxy
                         array.GetType().GetElementType().Name, array.Length));
                 }
 
-                string fieldValue = fValue.ToString();
                 if (fValue is byte[])
-                    fieldValue = DumpArray(fValue as byte[]);
+                    Stream.Write(": " + DumpArray(fValue as byte[]) + "\n");
                 else if (fValue is Array)
                 {
                     Stream.Write(": ");
@@ -67,7 +66,7 @@ namespace SMProxy
                     Stream.WriteLine();
                 }
                 else
-                    Stream.Write(": " + fieldValue + "\n");
+                    Stream.Write(": " + fValue + "\n");
             }
             Stream.WriteLine();
             Stream.Flush();
