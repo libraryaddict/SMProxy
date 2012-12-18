@@ -57,7 +57,7 @@ namespace SMProxy.Metadata
             };
             Array.Copy(DataUtility.CreateInt16(Value.Id), 0, data, 1, 2);
             Array.Copy(DataUtility.CreateInt16(Value.Metadata), 0, data, 4, 2);
-            if (Value.Nbt == null && Value.Nbt.RootTag != null)
+            if (Value.Nbt != null && Value.Nbt.RootTag != null)
             {
                 MemoryStream ms = new MemoryStream();
                 Value.Nbt.SaveToStream(ms, NbtCompression.None);

@@ -620,6 +620,7 @@ namespace SMProxy
         public int X, Y, Z;
         public int Metadata;
         public short? SpeedX, SpeedY, SpeedZ;
+        public byte Yaw, Pitch; // TODO: Packed bytes
 
         public byte Id { get { return 0x17; } }
 
@@ -630,6 +631,8 @@ namespace SMProxy
             X = stream.ReadInt32();
             Y = stream.ReadInt32();
             Z = stream.ReadInt32();
+            Yaw = stream.ReadUInt8();
+            Pitch = stream.ReadUInt8();
             Metadata = stream.ReadInt32();
             if (Metadata != 0)
             {
@@ -647,6 +650,8 @@ namespace SMProxy
             stream.WriteInt32(X);
             stream.WriteInt32(Y);
             stream.WriteInt32(Z);
+            stream.WriteUInt8(Yaw);
+            stream.WriteUInt8(Pitch);
             stream.WriteInt32(Metadata);
             if (Metadata != 0)
             {
@@ -677,6 +682,7 @@ namespace SMProxy
             Z = stream.ReadInt32();
             Yaw = stream.ReadUInt8();
             Pitch = stream.ReadUInt8();
+            HeadYaw = stream.ReadUInt8();
             VelocityX = stream.ReadInt16();
             VelocityY = stream.ReadInt16();
             VelocityZ = stream.ReadInt16();
@@ -1244,6 +1250,7 @@ namespace SMProxy
     {
         // TODO: See about making this packet more detailed in logs
         public short ChunkCount;
+        public bool Unknown;
         public byte[] ChunkData;
         public byte[] ChunkMetadata;
 
@@ -1253,6 +1260,7 @@ namespace SMProxy
         {
             ChunkCount = stream.ReadInt16();
             var length = stream.ReadInt32();
+            Unknown = stream.ReadBoolean();
             ChunkData = stream.ReadUInt8Array(length);
             ChunkMetadata = stream.ReadUInt8Array(ChunkCount * 12);
         }
@@ -1262,6 +1270,7 @@ namespace SMProxy
             stream.WriteUInt8(Id);
             stream.WriteInt16(ChunkCount);
             stream.WriteInt32(ChunkData.Length);
+            stream.WriteBoolean(Unknown);
             stream.WriteUInt8Array(ChunkData);
             stream.WriteUInt8Array(ChunkMetadata);
         }

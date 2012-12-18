@@ -58,6 +58,7 @@ namespace SMProxy.Metadata
             while (key != 127)
             {
                 key = stream.ReadUInt8();
+                if (key == 127) break;
                 byte type = (byte)((key & 0xE0) >> 5);
                 byte index = (byte)(key & 0x1F);
                 var entryType = EntryTypes[type];
@@ -73,7 +74,7 @@ namespace SMProxy.Metadata
             stream.Write(data, 0, data.Length);
         }
 
-        private static Type[] EntryTypes = new Type[]
+        private static Type[] EntryTypes = new[]
             {
                 typeof(MetadataByte), // 0
                 typeof(MetadataShort), // 1
@@ -81,7 +82,6 @@ namespace SMProxy.Metadata
                 typeof(MetadataFloat), // 3
                 typeof(MetadataString), // 4
                 typeof(MetadataSlot), // 5
-                //typeof(MetadataVector3) // 6 // Unsupported, not used in vanilla minecraft
             };
 
         public override string ToString()
