@@ -1109,6 +1109,7 @@ namespace SMProxy
         {
             X = stream.ReadInt32();
             Z = stream.ReadInt32();
+            GroundUpContinuous = stream.ReadBoolean();
             PrimaryBitMap = stream.ReadUInt16();
             AddBitMap = stream.ReadUInt16();
             var length = stream.ReadInt32();
@@ -1120,6 +1121,7 @@ namespace SMProxy
             stream.WriteUInt8(Id);
             stream.WriteInt32(X);
             stream.WriteInt32(Z);
+            stream.WriteBoolean(GroundUpContinuous);
             stream.WriteUInt16(PrimaryBitMap);
             stream.WriteUInt16(AddBitMap);
             stream.WriteInt32(Data.Length);

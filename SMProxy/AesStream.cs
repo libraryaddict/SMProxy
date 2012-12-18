@@ -63,7 +63,7 @@ namespace SMProxy
 
         public override long Position
         {
-            get { throw new NotSupportedException(); }
+            get { return 0; } // hack for libnbt
             set { throw new NotSupportedException(); }
         }
 
