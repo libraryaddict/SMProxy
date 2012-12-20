@@ -555,43 +555,6 @@ namespace SMProxy
         }
     }
 
-    public struct SpawnDroppedItemPacket : IPacket
-    {
-        public int EntityId;
-        public Slot Item;
-        public int X, Y, Z;
-        public byte Rotation;
-        public byte Pitch;
-        public byte Roll;
-
-        public byte Id { get { return 0x15; } }
-
-        public void ReadPacket(MinecraftStream stream)
-        {
-            EntityId = stream.ReadInt32();
-            Item = Slot.FromStream(stream);
-            X = stream.ReadInt32();
-            Y = stream.ReadInt32();
-            Z = stream.ReadInt32();
-            Rotation = stream.ReadUInt8();
-            Pitch = stream.ReadUInt8();
-            Roll = stream.ReadUInt8();
-        }
-
-        public void WritePacket(MinecraftStream stream)
-        {
-            stream.WriteUInt8(Id);
-            stream.WriteInt32(EntityId);
-            Item.WriteTo(stream);
-            stream.WriteInt32(X);
-            stream.WriteInt32(Y);
-            stream.WriteInt32(Z);
-            stream.WriteUInt8(Rotation);
-            stream.WriteUInt8(Pitch);
-            stream.WriteUInt8(Roll);
-        }
-    }
-
     public struct CollectItemPacket : IPacket
     {
         public int ItemId;
@@ -618,7 +581,7 @@ namespace SMProxy
         public int EntityId;
         public byte Type;
         public int X, Y, Z;
-        public int Metadata;
+        public int Data;
         public short? SpeedX, SpeedY, SpeedZ;
         public byte Yaw, Pitch; // TODO: Packed bytes
 
@@ -633,8 +596,8 @@ namespace SMProxy
             Z = stream.ReadInt32();
             Yaw = stream.ReadUInt8();
             Pitch = stream.ReadUInt8();
-            Metadata = stream.ReadInt32();
-            if (Metadata != 0)
+            Data = stream.ReadInt32();
+            if (Data != 0)
             {
                 SpeedX = stream.ReadInt16();
                 SpeedY = stream.ReadInt16();
@@ -652,8 +615,8 @@ namespace SMProxy
             stream.WriteInt32(Z);
             stream.WriteUInt8(Yaw);
             stream.WriteUInt8(Pitch);
-            stream.WriteInt32(Metadata);
-            if (Metadata != 0)
+            stream.WriteInt32(Data);
+            if (Data != 0)
             {
                 stream.WriteInt16(SpeedX.Value);
                 stream.WriteInt16(SpeedY.Value);
@@ -699,6 +662,7 @@ namespace SMProxy
             stream.WriteInt32(Z);
             stream.WriteUInt8(Yaw);
             stream.WriteUInt8(Pitch);
+            stream.WriteUInt8(HeadYaw);
             stream.WriteInt16(VelocityX);
             stream.WriteInt16(VelocityY);
             stream.WriteInt16(VelocityZ);
@@ -784,9 +748,9 @@ namespace SMProxy
         {
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
-            stream.WriteInt32(VelocityX);
-            stream.WriteInt32(VelocityY);
-            stream.WriteInt32(VelocityZ);
+            stream.WriteInt16(VelocityX);
+            stream.WriteInt16(VelocityY);
+            stream.WriteInt16(VelocityZ);
         }
     }
 
@@ -1293,6 +1257,7 @@ namespace SMProxy
             X = stream.ReadDouble();
             Y = stream.ReadDouble();
             Z = stream.ReadDouble();
+            Radius = stream.ReadSingle();
             RecordCount = stream.ReadInt32();
             Records = stream.ReadUInt8Array(RecordCount * 3);
             PlayerVelocityX = stream.ReadSingle();
@@ -1306,6 +1271,7 @@ namespace SMProxy
             stream.WriteDouble(X);
             stream.WriteDouble(Y);
             stream.WriteDouble(Z);
+            stream.WriteSingle(Radius);
             stream.WriteInt32(RecordCount);
             stream.WriteUInt8Array(Records);
             stream.WriteSingle(PlayerVelocityX);
@@ -1317,7 +1283,9 @@ namespace SMProxy
     public struct SoundOrParticleEffectPacket : IPacket
     {
         public int EntityId;
-        public int X, Y, Z;
+        public int X;
+        public sbyte Y;
+        public int Z;
         public int Data;
         public bool DisableRelativeVolume;
 
@@ -1327,7 +1295,7 @@ namespace SMProxy
         {
             EntityId = stream.ReadInt32();
             X = stream.ReadInt32();
-            Y = stream.ReadInt32();
+            Y = stream.ReadInt8();
             Z = stream.ReadInt32();
             Data = stream.ReadInt32();
             DisableRelativeVolume = stream.ReadBoolean();
@@ -1338,7 +1306,7 @@ namespace SMProxy
             stream.WriteUInt8(Id);
             stream.WriteInt32(EntityId);
             stream.WriteInt32(X);
-            stream.WriteInt32(Y);
+            stream.WriteInt8(Y);
             stream.WriteInt32(Z);
             stream.WriteInt32(Data);
             stream.WriteBoolean(DisableRelativeVolume);
@@ -1732,7 +1700,7 @@ namespace SMProxy
             stream.WriteUInt8(Action);
             var tempStream = new MemoryStream();
             Nbt.SaveToStream(tempStream, NbtCompression.GZip);
-            var buffer = tempStream.GetBuffer();//.Take((int)tempStream.Position).ToArray(); // ?
+            var buffer = tempStream.GetBuffer();
             stream.WriteInt16((short)buffer.Length);
             stream.WriteUInt8Array(buffer);
         }
@@ -1877,7 +1845,7 @@ namespace SMProxy
     public struct PluginMessage : IPacket
     {
         public string Channel;
-        public byte[] Data;
+        public byte[] Data; // TODO: For known channels, elaborate on the data
 
         public byte Id { get { return 0xFA; } }
 

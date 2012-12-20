@@ -30,7 +30,7 @@ namespace SMProxy
             typeof(AnimationPacket), // 0x12
             typeof(EntityActionPacket), // 0x13
             typeof(SpawnNamedEntityPacket), // 0x14
-            typeof(SpawnDroppedItemPacket), // 0x15
+            null, // 0x15
             typeof(CollectItemPacket), // 0x16
             typeof(SpawnObjectOrVehiclePacket), // 0x17
             typeof(SpawnMobPacket), // 0x18
