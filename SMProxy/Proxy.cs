@@ -28,6 +28,8 @@ namespace SMProxy
         private EncryptionKeyResponsePacket ServerEncryptionResponse { get; set; }
         private byte[] ClientVerificationToken { get; set; }
 
+        public event EventHandler ConnectionClosed;
+
         public Proxy(NetworkStream client, NetworkStream server, Log log)
         {
             Client = client;
@@ -76,6 +78,13 @@ namespace SMProxy
                     // We use a BufferedStream to make sure packets get sent in one piece, rather than
                     // a field at a time. Flushing it here sends the assembled packet.
                     ServerStream.Flush();
+                    if (packet is DisconnectPacket)
+                    {
+                        Console.WriteLine("Client disconnected: " + ((DisconnectPacket)packet).Reason);
+                        if (ConnectionClosed != null)
+                            ConnectionClosed(this, null);
+                        Worker.Abort();
+                    }
                 }
             }
         }
@@ -95,6 +104,13 @@ namespace SMProxy
                 {
                     packet.WritePacket(ClientStream);
                     ClientStream.Flush();
+                    if (packet is DisconnectPacket)
+                    {
+                        Console.WriteLine("Client disconnected: " + ((DisconnectPacket)packet).Reason);
+                        if (ConnectionClosed != null)
+                            ConnectionClosed(this, null);
+                        Worker.Abort();
+                    }
                 }
             }
         }
@@ -156,7 +172,6 @@ namespace SMProxy
                 PublicKey = encodedKey.GetBytes()
             };
             // Send the client our encryption details and await its response
-            Console.WriteLine("Sending client encryption request...");
             ClientEncryptionRequest.WritePacket(ClientStream);
             ClientStream.Flush();
         }
@@ -168,17 +183,15 @@ namespace SMProxy
 
             // Decrypt shared secret
             ClientSharedKey = CryptoServiceProvider.Decrypt(encryptionKeyResponsePacket.SharedSecret, false);
-            Console.WriteLine("Client shared key decrypted.");
             var verificationToken = CryptoServiceProvider.Decrypt(encryptionKeyResponsePacket.VerificationToken, false);
             // Check verification token
             for (int i = 0; i < verificationToken.Length; i++)
             {
                 if (verificationToken[i] != ClientVerificationToken[i])
-                    Console.WriteLine("Verification tokens do not match!");
+                    Log.Write("WARNING: Client verification token does not match!");
             }
 
             // Send unencrypted response
-            Console.WriteLine("Sending server encryption response...");
             ServerEncryptionResponse.WritePacket(ServerStream);
             ServerStream.Flush();
 
@@ -194,7 +207,7 @@ namespace SMProxy
 
             // Wrap the server stream in a crypto stream
             ServerStream = new MinecraftStream(new BufferedStream(new AesStream(Server, ServerSharedKey)));
-            Console.WriteLine("Encrypted server connection established.");
+            Log.Write("Encrypted server connection established.");
 
             // Write the response. This is the first encrypted packet
             // sent to the client. The correct response is to send
@@ -210,7 +223,7 @@ namespace SMProxy
 
             // Wrap the client stream in a crypto stream
             ClientStream = new MinecraftStream(new BufferedStream(new AesStream(Client, ClientSharedKey)));
-            Console.WriteLine("Encrypted client connection established.");
+            Log.Write("Encrypted client connection established.");
 
             // And now we're done with encryption and everything can
             // continue normally.
