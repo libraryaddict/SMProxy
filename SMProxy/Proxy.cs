@@ -13,7 +13,7 @@ namespace SMProxy
         public const int ProtocolVersion = 49;
         public const int MillisecondsBetweenUpdates = 10;
 
-        public Timer Timer { get; set; }
+        public Thread Worker { get; set; }
         public NetworkStream Client { get; set; }
         public NetworkStream Server { get; set; }
         public Log Log { get; set; }
@@ -41,58 +41,61 @@ namespace SMProxy
 
         public void Start()
         {
-            Timer = new Timer(Tick, null, MillisecondsBetweenUpdates, Timeout.Infinite);
+            Worker = new Thread(DoWork);
+            Worker.Start();
         }
 
         public void Stop()
         {
-            Timer.Change(Timeout.Infinite, Timeout.Infinite);
+            Worker.Abort();
         }
 
-        private void Tick(object discarded)
+        private void DoWork()
         {
             // TODO: Fallback to raw proxy
-            UpdateServer();
-            UpdateClient();
-            // We do the timer this way in case there's some enormous packet or something that takes more than
-            // MillisecondsBetweenUpdates to deal with. This way, we don't have a race condition where Tick is
-            // running several times simultaneously.
-            Timer.Change(MillisecondsBetweenUpdates, Timeout.Infinite);
+            while (true)
+            {
+                UpdateServer();
+                UpdateClient();
+                Thread.Sleep(1);
+            }
         }
 
         private void UpdateClient()
         {
-            if (!Client.DataAvailable)
-                return;
-            var packet = PacketReader.ReadPacket(ClientStream);
-            Log.LogPacket(packet, true);
-
-            if (packet is EncryptionKeyResponsePacket)
-                FinializeClientEncryption((EncryptionKeyResponsePacket)packet);
-            else
+            while (Client.DataAvailable)
             {
-                packet.WritePacket(ServerStream);
-                // We use a BufferedStream to make sure packets get sent in one piece, rather than
-                // a field at a time. Flushing it here sends the assembled packet.
-                ServerStream.Flush();
+                var packet = PacketReader.ReadPacket(ClientStream);
+                Log.LogPacket(packet, true);
+
+                if (packet is EncryptionKeyResponsePacket)
+                    FinializeClientEncryption((EncryptionKeyResponsePacket)packet);
+                else
+                {
+                    packet.WritePacket(ServerStream);
+                    // We use a BufferedStream to make sure packets get sent in one piece, rather than
+                    // a field at a time. Flushing it here sends the assembled packet.
+                    ServerStream.Flush();
+                }
             }
         }
 
         private void UpdateServer()
         {
-            if (!Server.DataAvailable)
-                return;
-            var packet = PacketReader.ReadPacket(ServerStream);
-            Log.LogPacket(packet, false);
-
-            if (packet is EncryptionKeyRequestPacket)
-                InitializeEncryption((EncryptionKeyRequestPacket)packet);
-            else if (packet is EncryptionKeyResponsePacket)
-                FinializeServerEncryption((EncryptionKeyResponsePacket)packet);
-            else
+            while (Server.DataAvailable)
             {
-                packet.WritePacket(ClientStream);
-                ClientStream.Flush();
+                var packet = PacketReader.ReadPacket(ServerStream);
+                Log.LogPacket(packet, false);
+
+                if (packet is EncryptionKeyRequestPacket)
+                    InitializeEncryption((EncryptionKeyRequestPacket)packet);
+                else if (packet is EncryptionKeyResponsePacket)
+                    FinializeServerEncryption((EncryptionKeyResponsePacket)packet);
+                else
+                {
+                    packet.WritePacket(ClientStream);
+                    ClientStream.Flush();
+                }
             }
         }
 
