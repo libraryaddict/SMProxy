@@ -59,7 +59,7 @@ namespace SMProxy.Metadata
                     if (Value.Nbt.RootTag != null)
                     {
                         MemoryStream ms = new MemoryStream();
-                        Value.Nbt.SaveToStream(ms, NbtCompression.None);
+                        Value.Nbt.SaveToStream(ms, NbtCompression.GZip);
                         var nbt = ms.GetBuffer();
                         Array.Resize<byte>(ref data, data.Length + nbt.Length + 2);
                         Array.Copy(DataUtility.CreateInt16((short)nbt.Length), 0, data, 6, 2);

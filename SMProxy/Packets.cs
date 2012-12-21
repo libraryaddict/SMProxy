@@ -1688,7 +1688,8 @@ namespace SMProxy
             Action = stream.ReadUInt8();
             var length = stream.ReadInt16();
             var data = stream.ReadUInt8Array(length);
-            Nbt = new NbtFile(new MemoryStream(data), NbtCompression.GZip, null);
+            Nbt = new NbtFile();
+            Nbt.LoadFromBuffer(data, 0, length, NbtCompression.GZip, null);
         }
 
         public void WritePacket(MinecraftStream stream)

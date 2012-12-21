@@ -44,7 +44,9 @@ namespace SMProxy
             var length = stream.ReadInt16();
             if (length == -1)
                 return slot;
-            slot.Nbt = new NbtFile(stream, NbtCompression.GZip, null);
+            slot.Nbt = new NbtFile();
+            var buffer = stream.ReadUInt8Array(length);
+            slot.Nbt.LoadFromBuffer(buffer, 0, length, NbtCompression.GZip, null);
             return slot;
         }
 
