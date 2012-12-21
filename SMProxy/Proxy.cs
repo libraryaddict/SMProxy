@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Net;
 
 namespace SMProxy
 {
@@ -17,6 +18,7 @@ namespace SMProxy
         public NetworkStream Client { get; set; }
         public NetworkStream Server { get; set; }
         public Log Log { get; set; }
+        public ProxySettings Settings { get; set; }
         private MinecraftStream ClientStream { get; set; }
         private MinecraftStream ServerStream { get; set; }
         private byte[] ServerSharedKey { get; set; }
@@ -30,7 +32,7 @@ namespace SMProxy
 
         public event EventHandler ConnectionClosed;
 
-        public Proxy(NetworkStream client, NetworkStream server, Log log)
+        public Proxy(NetworkStream client, NetworkStream server, Log log, ProxySettings settings)
         {
             Client = client;
             Server = server;
@@ -39,6 +41,7 @@ namespace SMProxy
             ServerStream = new MinecraftStream(new BufferedStream(Server));
             CryptoServiceProvider = new RSACryptoServiceProvider(1024);
             ServerKey = CryptoServiceProvider.ExportParameters(true);
+            Settings = settings;
         }
 
         public void Start()
@@ -154,7 +157,29 @@ namespace SMProxy
             // Authenticate with minecraft.net if need be
             if (packet.ServerId != "-")
             {
-                // TODO
+                var session = Minecraft.DoLogin(Settings.Username, Settings.Password);
+                if (session != null && string.IsNullOrEmpty(session.Error))
+                {
+                    // Generate session hash
+                    byte[] hashData = Encoding.ASCII.GetBytes(packet.ServerId)
+                        .Concat(ServerSharedKey)
+                        .Concat(packet.PublicKey).ToArray();
+                    var hash = Cryptography.JavaHexDigest(hashData);
+                    var webClient = new WebClient();
+                    string result = webClient.DownloadString("http://session.minecraft.net/game/joinserver.jsp?user=" +
+                        Uri.EscapeUriString(session.Username) +
+                        "&sessionId=" + Uri.EscapeUriString(session.SessionID) +
+                        "&serverId=" + Uri.EscapeUriString(hash));
+                    if (result != "OK")
+                        Console.WriteLine("Warning: Unable to login as user " + Settings.Username + ": " + result);
+                }
+                else
+                {
+                    if (session == null)
+                        Console.WriteLine("Warning: Unable to login as user " + Settings.Username + ".");
+                    else
+                        Console.WriteLine("Warning: Unable to login as user " + Settings.Username + ": " + session.Error);
+                }
             }
 
             // Interact with the client (acting as a server)

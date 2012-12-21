@@ -54,8 +54,6 @@ The available options are described below:
   is not provided along with --username. If no lastlogin file is present, the proxy will fail to connect to servers in
   online mode.
 
-**--port [port]**: Specifies the port to use for the local endpoint.
-
 **--unfilter [packets...]**: Similar to `--filter`, this will do the opposite, excluding the specified packets from
   the log.
 

@@ -50,6 +50,9 @@ namespace SMProxy
                         case "--password":
                             ProxySettings.Password = args[++i];
                             break;
+                        case "--help":
+                            DisplayHelp();
+                            return;
                         default:
                             Console.WriteLine("Invalid command line arguments. Use --help for more information.");
                             return;
@@ -86,6 +89,8 @@ namespace SMProxy
             Listener.Start();
             Listener.BeginAcceptTcpClient(AcceptClient, null);
 
+            Console.WriteLine("Proxy started on " + ProxySettings.LocalEndPoint);
+
             Console.WriteLine("Press 'q' to exit.");
 
             ConsoleKeyInfo cki = new ConsoleKeyInfo();
@@ -100,7 +105,7 @@ namespace SMProxy
             var server = new TcpClient();
             server.Connect(ProxySettings.RemoteEndPoint);
             var proxy = new Proxy(client.GetStream(), server.GetStream(),
-                new Log(new StreamWriter(GetLogName())));
+                new Log(new StreamWriter(GetLogName()), ProxySettings), ProxySettings);
             Sessions.Add(proxy);
             proxy.Start();
             Listener.BeginAcceptTcpClient(AcceptClient, null);
@@ -117,20 +122,45 @@ namespace SMProxy
 
         private static IPEndPoint ParseEndPoint(string arg)
         {
+            IPAddress address;
+            int port;
             if (arg.Contains(':'))
             {
                 // Both IP and port are specified
                 var parts = arg.Split(':');
-                return new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
+                if (!IPAddress.TryParse(parts[0], out address))
+                    address = Resolve(parts[0]);
+                return new IPEndPoint(address, int.Parse(parts[1]));
             }
-            if (arg.Contains('.')) // IP specified
-                return new IPEndPoint(IPAddress.Parse(arg), 25565);
-            return new IPEndPoint(IPAddress.Loopback, int.Parse(arg));
+            if (IPAddress.TryParse(arg, out address))
+                return new IPEndPoint(address, 25564);
+            if (int.TryParse(arg, out port))
+                return new IPEndPoint(IPAddress.Loopback, port);
+            return new IPEndPoint(Resolve(arg), 25564);
+        }
+
+        private static IPAddress Resolve(string arg)
+        {
+            return Dns.GetHostEntry(arg).AddressList.FirstOrDefault();
         }
 
         private static string GetLogName()
         {
             return "log_" + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".txt";
+        }
+
+        private static void DisplayHelp()
+        {
+            Console.WriteLine("Usage: SMProxy.exe [options...] [remote endpoint] [local endpoint]");
+            Console.WriteLine("Default remote: 127.0.0.1:25565; Default local: 127.0.0.1:25564");
+            Console.WriteLine("Options:");
+            Console.WriteLine("--local-endpoint [endpoint]: Specify the local endpoint");
+            Console.WriteLine("--filter [packets...]: A hexadecimal, comma-delimited list of packets to log");
+            Console.WriteLine("--omit-client: Omits client->server packets from the log");
+            Console.WriteLine("--omit-server: Omits server->client packets from the log");
+            Console.WriteLine("--password [password]: Specify a minecraft.net password");
+            Console.WriteLine("--unfilter [packets]: A hexadecimal, comma-delimited list of packets NOT to log");
+            Console.WriteLine("--username [name]: Specify a minecraft.net username");
         }
     }
 }

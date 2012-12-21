@@ -15,7 +15,7 @@ namespace SMProxy
             LocalEndPoint = new IPEndPoint(IPAddress.Loopback, 25564);
             RemoteEndPoint = new IPEndPoint(IPAddress.Loopback, 25565);
             PacketFilter = new List<byte>();
-            for (byte i = 0; i <= 255; i++) PacketFilter.Add(i);
+            for (int i = 0; i < 256; i++) PacketFilter.Add((byte)i);
         }
 
         /// <summary>

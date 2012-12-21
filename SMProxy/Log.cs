@@ -11,16 +11,21 @@ namespace SMProxy
         public StreamWriter Stream { get; set; }
         private MemoryStream MemoryStream { get; set; } // Used for getting raw packet data
         private MinecraftStream MinecraftStream { get; set; } // Used for getting raw packet data
+        private ProxySettings Settings { get; set; }
 
-        public Log(StreamWriter stream)
+        public Log(StreamWriter stream, ProxySettings settings)
         {
             Stream = stream;
             MemoryStream = new MemoryStream();
             MinecraftStream = new MinecraftStream(MemoryStream);
+            Settings = settings;
         }
 
         public void LogPacket(IPacket packet, bool clientToServer)
         {
+            if (clientToServer && !Settings.LogClient)      return;
+            if (!clientToServer && !Settings.LogServer)     return;
+            if (!Settings.PacketFilter.Contains(packet.Id)) return;
             var type = packet.GetType();
             var fields = type.GetFields();
             // Log time, direction, name
