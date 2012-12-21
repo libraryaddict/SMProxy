@@ -59,13 +59,16 @@
     <Compile Include="Metadata\MetadataShort.cs" />
     <Compile Include="Metadata\MetadataSlot.cs" />
     <Compile Include="Metadata\MetadataString.cs" />
+    <Compile Include="Minecraft.cs" />
     <Compile Include="MinecraftStream.cs" />
     <Compile Include="MinecraftStream.Stream.cs" />
     <Compile Include="PacketReader.cs" />
     <Compile Include="Packets.cs" />
+    <Compile Include="PKCSKeyGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy.cs" />
+    <Compile Include="ProxySettings.cs" />
     <Compile Include="Slot.cs" />
   </ItemGroup>
   <ItemGroup>

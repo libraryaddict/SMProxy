@@ -134,5 +134,11 @@ namespace SMProxy
             }
             return newValue.Substring(1);
         }
+
+        public void Write(string p)
+        {
+            Stream.Write(DateTime.Now.ToString("{hh:mm:ss.fff} "));
+            Stream.WriteLine(p);
+        }
     }
 }
