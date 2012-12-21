@@ -11,8 +11,7 @@ namespace SMProxy
 {
     public class Proxy
     {
-        public const int ProtocolVersion = 49;
-        public const int MillisecondsBetweenUpdates = 10;
+        public const int ProtocolVersion = 51;
 
         public Thread Worker { get; set; }
         public NetworkStream Client { get; set; }
@@ -87,6 +86,15 @@ namespace SMProxy
                         if (ConnectionClosed != null)
                             ConnectionClosed(this, null);
                         Worker.Abort();
+                    }
+                    if (packet is HandshakePacket)
+                    {
+                        var handshake = (HandshakePacket)packet;
+                        if (handshake.ProtocolVersion != ProtocolVersion)
+                        {
+                            Console.WriteLine("Warning! Specified protocol version does not match SMProxy supported version!");
+                            Log.Write("Warning! Specified protocol version does not match SMProxy supported version!");
+                        }
                     }
                 }
             }

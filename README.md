@@ -1,10 +1,9 @@
 # SMProxy
 
-**NOTE**: SMProxy is nearing completion, and documentation is being written as if it were complete. Not all listed
-features are available.
-
 SMProxy is a proxy for Minecraft, allowing users to inspect the Minecraft protocol. It currently supports protocol
 version 51, which is used by Minecraft 1.4.6.
+
+[Download for 1.4.6](http://sircmpwn.github.com/SMProxy/SMProxy.exe)
 
 ## Using SMProxy
 
