@@ -231,24 +231,24 @@ namespace SMProxy
 
         public unsafe float ReadSingle()
         {
-            int value = ReadInt32();
+            uint value = ReadUInt32();
             return *(float*)&value;
         }
 
         public unsafe void WriteSingle(float value)
         {
-            WriteInt32(*(int*)&value);
+            WriteUInt32(*(uint*)&value);
         }
 
         public unsafe double ReadDouble()
         {
-            long value = ReadInt64();
+            ulong value = ReadUInt64();
             return *(double*)&value;
         }
 
         public unsafe void WriteDouble(double value)
         {
-            WriteInt64(*(long*)&value);
+            WriteUInt64(*(ulong*)&value);
         }
 
         public bool ReadBoolean()
