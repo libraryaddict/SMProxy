@@ -69,7 +69,7 @@ namespace SMProxy
                 (ReadUInt8() << 24) |
                 (ReadUInt8() << 16) |
                 (ReadUInt8() << 8 ) |
-                ReadUInt8());
+                 ReadUInt8());
         }
 
         public void WriteUInt32(uint value)
@@ -95,15 +95,15 @@ namespace SMProxy
 
         public ulong ReadUInt64()
         {
-            return (ulong)(
-                (ReadUInt8() << 56) |
-                (ReadUInt8() << 48) |
-                (ReadUInt8() << 40) |
-                (ReadUInt8() << 32) |
-                (ReadUInt8() << 24) |
-                (ReadUInt8() << 16) |
-                (ReadUInt8() << 8) |
-                ReadUInt8());
+            return unchecked(
+                   ((ulong)ReadUInt8() << 56) |
+                   ((ulong)ReadUInt8() << 48) |
+                   ((ulong)ReadUInt8() << 40) |
+                   ((ulong)ReadUInt8() << 32) |
+                   ((ulong)ReadUInt8() << 24) |
+                   ((ulong)ReadUInt8() << 16) |
+                   ((ulong)ReadUInt8() << 8)  |
+                    (ulong)ReadUInt8());
         }
 
         public void WriteUInt64(ulong value)
