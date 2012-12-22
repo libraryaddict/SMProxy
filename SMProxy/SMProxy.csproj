@@ -68,7 +68,6 @@
     <Compile Include="Packets.cs" />
     <Compile Include="PKCSKeyGenerator.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
-    <Compile Include="Plugins\StopChat.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy.cs" />
