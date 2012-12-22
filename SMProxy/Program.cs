@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Globalization;
+using SMProxy.Plugins;
+using SMProxy.Events;
 
 namespace SMProxy
 {
@@ -15,10 +17,24 @@ namespace SMProxy
         private static TcpListener Listener { get; set; }
         private static List<Proxy> Sessions { get; set; }
         private static ProxySettings ProxySettings { get; set; }
+        private static List<IPlugin> Plugins { get; set; }
+
+        public static event EventHandler<UnrecognizedArgumentEventArgs> UnrecognizedArgument;
 
         static void Main(string[] args)
         {
             ProxySettings = new ProxySettings();
+            // Load plugins into AppDomain
+            foreach (var plugin in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll"))
+            {
+                try
+                {
+                    Assembly.LoadFile(plugin);
+                }
+                catch { }
+            }
+            LoadPlugins();
+
             bool remoteSet = false, localSet = false;
             // Interpret command line args
             for (int i = 0; i < args.Length; i++)
@@ -54,8 +70,21 @@ namespace SMProxy
                             DisplayHelp();
                             return;
                         default:
-                            Console.WriteLine("Invalid command line arguments. Use --help for more information.");
-                            return;
+                            var eventArgs = new UnrecognizedArgumentEventArgs
+                            {
+                                Argument = arg,
+                                Args = args,
+                                Index = i,
+                                Handled = false
+                            };
+                            if (UnrecognizedArgument != null)
+                                UnrecognizedArgument(null, eventArgs);
+                            if (!eventArgs.Handled)
+                            {
+                                Console.WriteLine("Invalid command line arguments. Use --help for more information.");
+                                return;
+                            }
+                            break;
                     }
                 }
                 else
@@ -66,8 +95,20 @@ namespace SMProxy
                         ProxySettings.LocalEndPoint = ParseEndPoint(arg);
                     else
                     {
-                        Console.WriteLine("Invalid command line arguments. Use --help for more information.");
-                        return;
+                        var eventArgs = new UnrecognizedArgumentEventArgs
+                        {
+                            Argument = arg,
+                            Args = args,
+                            Index = i,
+                            Handled = false
+                        };
+                        if (UnrecognizedArgument != null)
+                            UnrecognizedArgument(null, eventArgs);
+                        if (!eventArgs.Handled)
+                        {
+                            Console.WriteLine("Invalid command line arguments. Use --help for more information.");
+                            return;
+                        }
                     }
                 }
             }
@@ -107,8 +148,26 @@ namespace SMProxy
             var proxy = new Proxy(client.GetStream(), server.GetStream(),
                 new Log(new StreamWriter(GetLogName()), ProxySettings), ProxySettings);
             Sessions.Add(proxy);
+            foreach (var plugin in Plugins)
+                plugin.SessionInitialize(proxy);
             proxy.Start();
             Listener.BeginAcceptTcpClient(AcceptClient, null);
+        }
+
+        private static void LoadPlugins()
+        {
+            var typeList = AppDomain.CurrentDomain.GetAssemblies().Select(a =>
+                a.GetTypes().Where(t => typeof(IPlugin).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface));
+            Plugins = new List<IPlugin>();
+            foreach (var list in typeList)
+            {
+                foreach (var type in list)
+                {
+                    var plugin = Activator.CreateInstance(type) as IPlugin;
+                    plugin.GlobalInitialize();
+                    Plugins.Add(plugin);
+                }
+            }
         }
 
         private static List<byte> ParseFilter(string filter)

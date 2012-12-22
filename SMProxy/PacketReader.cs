@@ -277,5 +277,17 @@ namespace SMProxy
             packet.ReadPacket(stream);
             return packet;
         }
+
+        /// <summary>
+        /// Overrides the implementation for a certain packet.
+        /// </summary>
+        /// <param name="packetType"></param>
+        public static void OverridePacket(Type packetType)
+        {
+            if (!typeof(IPacket).IsAssignableFrom(packetType))
+                throw new InvalidCastException("Type must inherit from IPacket.");
+            var instance = (IPacket)Activator.CreateInstance(packetType);
+            Packets[instance.Id] = packetType;
+        }
     }
 }

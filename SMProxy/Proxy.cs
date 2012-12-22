@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Net;
+using SMProxy.Events;
 
 namespace SMProxy
 {
@@ -18,8 +19,9 @@ namespace SMProxy
         public NetworkStream Server { get; set; }
         public Log Log { get; set; }
         public ProxySettings Settings { get; set; }
-        private MinecraftStream ClientStream { get; set; }
-        private MinecraftStream ServerStream { get; set; }
+        public MinecraftStream ClientStream { get; set; }
+        public MinecraftStream ServerStream { get; set; }
+
         private byte[] ServerSharedKey { get; set; }
         private byte[] ClientSharedKey { get; set; }
         private RSAParameters ServerKey { get; set; }
@@ -30,6 +32,12 @@ namespace SMProxy
         private byte[] ClientVerificationToken { get; set; }
 
         public event EventHandler ConnectionClosed;
+        /// <summary>
+        /// Fired when a packet arrives, before it is proxied. Certain packets
+        /// (namely, encryption-related ones) are handled by SMProxy explicitly,
+        /// and this event is not called for those packets.
+        /// </summary>
+        public event EventHandler<IncomingPacketEventArgs> IncomingPacket;
 
         public Proxy(NetworkStream client, NetworkStream server, Log log, ProxySettings settings)
         {
@@ -76,7 +84,11 @@ namespace SMProxy
                     FinializeClientEncryption((EncryptionKeyResponsePacket)packet);
                 else
                 {
-                    packet.WritePacket(ServerStream);
+                    var eventArgs = new IncomingPacketEventArgs(packet, true);
+                    if (IncomingPacket != null)
+                        IncomingPacket(this, eventArgs);
+                    if (!eventArgs.Handled)
+                        packet.WritePacket(ServerStream);
                     // We use a BufferedStream to make sure packets get sent in one piece, rather than
                     // a field at a time. Flushing it here sends the assembled packet.
                     ServerStream.Flush();
@@ -113,11 +125,15 @@ namespace SMProxy
                     FinializeServerEncryption((EncryptionKeyResponsePacket)packet);
                 else
                 {
-                    packet.WritePacket(ClientStream);
+                    var eventArgs = new IncomingPacketEventArgs(packet, false);
+                    if (IncomingPacket != null)
+                        IncomingPacket(this, eventArgs);
+                    if (!eventArgs.Handled)
+                        packet.WritePacket(ClientStream);
                     ClientStream.Flush();
                     if (packet is DisconnectPacket)
                     {
-                        Console.WriteLine("Client disconnected: " + ((DisconnectPacket)packet).Reason);
+                        Console.WriteLine("Server disconnected: " + ((DisconnectPacket)packet).Reason);
                         if (ConnectionClosed != null)
                             ConnectionClosed(this, null);
                         Worker.Abort();
