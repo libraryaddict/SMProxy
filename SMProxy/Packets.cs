@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SMProxy.Metadata;
-using LibNbt;
+using fNbt;
 
 namespace SMProxy
 {
