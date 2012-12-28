@@ -1,3 +1,0 @@
-[submodule "externals/libnbt"]
-	path = externals/libnbt
-	url = git://github.com/fragmer/LibNbt2012.git
