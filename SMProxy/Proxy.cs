@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Net;
 using SMProxy.Events;
+using Craft.Net;
 
 namespace SMProxy
 {

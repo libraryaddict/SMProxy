@@ -46,7 +46,7 @@ namespace SMProxy
         }
 
         /// <summary>
-        /// Gets the asymetric Key used in the encryption algorythm.  Note that this is read only and is an empty byte array.
+        /// Gets the asymetric Key used in the encryption algorythm. Note that this is read only and is an empty byte array.
         /// </summary>
         public byte[] Key
         {
@@ -57,7 +57,7 @@ namespace SMProxy
         }
 
         /// <summary>
-        /// Gets the initialization vector used in in the encryption algorythm.  Note that this is read only and is an empty byte array.
+        /// Gets the initialization vector used in in the encryption algorythm. Note that this is read only and is an empty byte array.
         /// </summary>
         public byte[] IV
         {
@@ -118,7 +118,7 @@ namespace SMProxy
             // concatenate the salt bytes
             Array.Copy(salt, 0, data00, passwordBytes.Length, salt.Length);
 
-            // ---- do multi-hashing and contatenate results  D1, D2 ...  into keymaterial bytes ----
+            // ---- do multi-hashing and contatenate results D1, D2 ... into keymaterial bytes ----
             MD5 md5 = new MD5CryptoServiceProvider();
             byte[] result = null;
 
@@ -127,7 +127,7 @@ namespace SMProxy
 
             for (int j = 0; j < segments; j++)
             {
-                // ----  Now hash consecutively for iterationsMd5 times ------
+                // ---- Now hash consecutively for iterationsMd5 times ------
                 if (j == 0)
                 {
                     // initialize

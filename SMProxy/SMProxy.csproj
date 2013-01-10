@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SMProxy</RootNamespace>
     <AssemblyName>SMProxy</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -43,39 +43,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AesStream.cs" />
-    <Compile Include="Attributes.cs" />
-    <Compile Include="BigInteger.cs" />
-    <Compile Include="BufferedStream.cs" />
-    <Compile Include="Cryptography.cs" />
-    <Compile Include="DataUtility.cs" />
-    <Compile Include="Enumerations.cs" />
     <Compile Include="Events\IncomingPacketEventArgs.cs" />
     <Compile Include="Events\UnrecognizedArgumentEventArgs.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="Metadata\MetadataByte.cs" />
-    <Compile Include="Metadata\MetadataDictionary.cs" />
-    <Compile Include="Metadata\MetadataEntry.cs" />
-    <Compile Include="Metadata\MetadataFloat.cs" />
-    <Compile Include="Metadata\MetadataInt.cs" />
-    <Compile Include="Metadata\MetadataShort.cs" />
-    <Compile Include="Metadata\MetadataSlot.cs" />
-    <Compile Include="Metadata\MetadataString.cs" />
     <Compile Include="Minecraft.cs" />
-    <Compile Include="MinecraftStream.cs" />
-    <Compile Include="MinecraftStream.Stream.cs" />
-    <Compile Include="PacketReader.cs" />
-    <Compile Include="Packets.cs" />
     <Compile Include="PKCSKeyGenerator.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy.cs" />
     <Compile Include="ProxySettings.cs" />
-    <Compile Include="Slot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\externals\fNbt\fNbt\fNbt.csproj">
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\externals\Craft.Net\Craft.Net\Craft.Net.csproj">
+      <Project>{C3BBAB7E-606F-420E-9461-C8CFAEC2476B}</Project>
+      <Name>Craft.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\Craft.Net\externals\fNbt\fNbt\fNbt.csproj">
       <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
       <Name>fNbt</Name>
     </ProjectReference>

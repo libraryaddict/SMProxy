@@ -1,9 +1,13 @@
 # SMProxy
 
 SMProxy is a proxy for Minecraft, allowing users to inspect the Minecraft protocol. It currently supports protocol
-version 51, which is used by Minecraft 1.4.6.
+version 51, which is used by Minecraft 1.4.7.
 
-[Download for 1.4.6](http://sircmpwn.github.com/SMProxy/SMProxy.exe)
+[Download for 1.4.7](http://sircmpwn.github.com/SMProxy/SMProxy.exe)
+
+**Note**: SMProxy uses [Craft.Net](https://github.com/SirCmpwn/Craft.Net) for networking, by including it via a
+submodule. Craft.Net often has support for newer versions of Minecraft in the `snapshot` branch. If you want to
+test Minecraft snapshots, use the `snapshot` branch of Craft.Net when you build SMProxy.
 
 ## Using SMProxy
 
