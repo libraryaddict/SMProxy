@@ -53,6 +53,7 @@ a:hover {
     padding: 5px 10px;
     display: block;
     margin: 5px 0;
+    border: 1px solid #2F8ECE;
 }
 
 pre {
