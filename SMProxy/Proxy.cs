@@ -107,8 +107,11 @@ namespace SMProxy
                     var eventArgs = new IncomingPacketEventArgs(packet, true);
                     if (IncomingPacket != null)
                         IncomingPacket(this, eventArgs);
-                    if (!eventArgs.Handled)
-                        packet.WritePacket(ServerStream);
+                    lock (Server)
+                    {
+                        if (!eventArgs.Handled)
+                            packet.WritePacket(ServerStream);
+                    }
                     // We use a BufferedStream to make sure packets get sent in one piece, rather than
                     // a field at a time. Flushing it here sends the assembled packet.
                     ServerStream.Flush();
@@ -150,9 +153,12 @@ namespace SMProxy
                     var eventArgs = new IncomingPacketEventArgs(packet, false);
                     if (IncomingPacket != null)
                         IncomingPacket(this, eventArgs);
-                    if (!eventArgs.Handled)
-                        packet.WritePacket(ClientStream);
-                    ClientStream.Flush();
+                    lock (Client)
+                    {
+                        if (!eventArgs.Handled)
+                            packet.WritePacket(ClientStream);
+                        ClientStream.Flush();
+                    }
                     if (packet is DisconnectPacket)
                     {
                         Console.WriteLine("Server disconnected: " + ((DisconnectPacket)packet).Reason);
