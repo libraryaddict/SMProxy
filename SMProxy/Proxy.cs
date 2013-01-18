@@ -280,7 +280,7 @@ namespace SMProxy
                 var client = new WebClient();
                 var result = client.DownloadString(string.Format("http://session.minecraft.net/game/checkserver.jsp?user={0}&serverId={1}",
                     PlayerName, hash));
-                if (result != "OK")
+                if (result != "YES")
                 {
                     Log.Write("Failed to authenticate " + PlayerName + "!");
                     new DisconnectPacket("Failed to authenticate!").WritePacket(ServerStream);
